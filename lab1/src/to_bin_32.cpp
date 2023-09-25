@@ -8,6 +8,7 @@ char* to_bin_32(uint32_t num) {
     }
     catch (const std::bad_alloc& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        throw exception;
     }
     for (int i = 0; i < SZ; ++i) {
         str[i] = ((num >> (SZ - i - 1)) & 1) + '0';
