@@ -1,23 +1,20 @@
 #include <iostream>
+#include "twelve.h"
 
 int main() {
-    
-    int* px = new int;
-    *px = 1;
 
-    int* py = new int;
-    *py = 1;
+    Twelve x {"3224ba"};
+    Twelve y {'3', '2', '2', '4', 'b', 'b'};
 
-
-    std::cout << *px << ' ' << px << " | " << *py << ' ' << py << std::endl;
-
-    py = px;
-
-    std::cout << *px << ' ' << px << " | " << *py << ' ' << py << std::endl;
+    x.print(std::cout) << std::endl;
+    y.print(std::cout) << std::endl;
 
 
-    delete px;
-    delete py;
+    std::cout << std::boolalpha << x.is_bigger(y) << std::endl;
+    std::cout << std::boolalpha << x.is_smaller(y) << std::endl;
+    std::cout << std::boolalpha << x.is_equal(y) << std::endl;
 
+    x.~Twelve();
+    y.~Twelve();
     return 0;
 }

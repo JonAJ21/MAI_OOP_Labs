@@ -5,6 +5,7 @@
 
 class Twelve {
 private:
+    const char* ALPHABET = "0123456789AB";
     unsigned char* _number;
     size_t _sz;
 public:
@@ -27,12 +28,8 @@ public:
     //----------------------------------------------
     // Methods
     
-    Twelve add(Twelve& other);
-    Twelve add(Twelve& lhs, Twelve& rhs);
+    std::ostream& print(std::ostream& os);
 
-    Twelve substract(Twelve& other);
-    Twelve substarct(Twelve& lhs, Twelve& rhs);
-    
     bool is_bigger(Twelve& other);
     bool is_bigger(Twelve& lhs, Twelve& rhs);
     
@@ -42,7 +39,11 @@ public:
     bool is_equal(Twelve& other);
     bool is_equal(Twelve& lhs, Twelve& rhs);
 
-    std::ostream& print(std::ostream& os);
+    Twelve add(Twelve& other);
+    Twelve add(Twelve& lhs, Twelve& rhs);
+
+    Twelve substract(Twelve& other);
+    Twelve substarct(Twelve& lhs, Twelve& rhs);
 };
 
 #endif // TWELVE_H

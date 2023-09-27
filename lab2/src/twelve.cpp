@@ -1,4 +1,7 @@
 #include "twelve.h"
+#include <cstring>
+
+//----------------------------------------------
 
 //----------------------------------------------
 // The rule of five
@@ -13,9 +16,14 @@ Twelve::Twelve(const std::initializer_list<unsigned char>& init_list) : _sz(init
     } catch (std::bad_alloc& exception) {
         throw exception;
     }
-    size_t i = 0;
+    size_t i = _sz;
     for (auto ch : init_list) {
-        _number[i++] = ch;
+        if (strchr(ALPHABET, toupper(ch)) != nullptr) {
+            _number[--i] = toupper(ch);
+        } else {
+            std::cout << "Error: incorrect value of type Twelve" << std::endl;
+            throw "Error: incorrect value of type Twelve";
+        }
     }
     _number[_sz] = '\0';
 }
@@ -28,7 +36,12 @@ Twelve::Twelve(const std::string& str) : _sz(str.size()) {
         throw exception;
     }
     for (size_t i = 0; i < _sz; ++i) {
-        _number[i] = str[i];
+        if (strchr(ALPHABET, toupper(str[i])) != nullptr) {
+            _number[_sz - i - 1] = toupper(str[i]);
+        } else {
+            std::cout << "Error: incorrect value of type Twelve" << std::endl;
+            throw "Error: incorrect value of type Twelve";
+        }
     }
     _number[_sz] = '\0';
 }
@@ -53,9 +66,9 @@ Twelve::Twelve(Twelve&& other) noexcept : _sz(other._sz), _number(other._number)
 }
 
 // ????????????????????????
-Twelve& Twelve::operator=(Twelve&& other) {
-    //TODO
-}
+// Twelve& Twelve::operator=(Twelve&& other) {
+//     //TODO
+// }
 
 Twelve::~Twelve() noexcept {
     _sz = 0;
@@ -64,8 +77,67 @@ Twelve::~Twelve() noexcept {
 }  
 
 //----------------------------------------------
-// Methods
+// Methods TODO
 
-Twelve Twelve::add(Twelve& other) {
-    unsigned char alphabet[] = "0123456789AB";
+std::ostream& Twelve::print(std::ostream& os) {
+    for (size_t i = 0; i < _sz; ++i) {
+        os << _number[_sz - i - 1];
+    }
+    return os;
 }
+
+bool Twelve::is_bigger(Twelve& other) {
+    if (_sz > other._sz) {
+        return true;
+    } else if (_sz < other._sz) {
+        return false;
+    } else {
+        for (size_t i = 0; i < _sz; ++i) {
+            char lhs_ch = _number[_sz - i - 1];
+            char rhs_ch = other._number[_sz - i - 1];
+            if (lhs_ch > rhs_ch) {
+                return true;
+            }
+            if (lhs_ch < rhs_ch) {
+                return false;
+            }
+        }
+        return false;
+    }
+}
+
+bool Twelve::is_smaller(Twelve& other) {
+    if (_sz < other._sz) {
+        return true;
+    } else if (_sz < other._sz) {
+        return false;
+    } else {
+        for (size_t i = 0; i < _sz; ++i) {
+            char lhs_ch = _number[_sz - i - 1];
+            char rhs_ch = other._number[_sz - i - 1];
+            if (lhs_ch < rhs_ch) {
+                return true;
+            }
+            if (lhs_ch > rhs_ch) {
+                return false;
+            }
+        }
+        return false;
+    }
+}
+
+bool Twelve::is_equal(Twelve& other) {
+    if (_sz != other._sz) {
+        return false;
+    }
+    for (size_t i = 0; i < _sz; ++i) {
+        if (_number[i] != other._number[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Twelve Twelve::add(Twelve& other) {
+
+// }
