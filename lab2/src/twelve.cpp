@@ -30,11 +30,11 @@ Twelve::Twelve(const std::initializer_list<unsigned char>& init_list) : _sz(init
 
 Twelve::Twelve(const std::string& str) : _sz(str.size()) {
     std::cout << "Copy string constructor" << std::endl;
-    try {
+    //try {
         _number = new unsigned char[_sz + 1];
-    } catch (std::bad_alloc& exception) {
-        throw exception;
-    }
+    //} catch (std::bad_alloc& exception) {
+    //    throw exception;
+    //}
     for (size_t i = 0; i < _sz; ++i) {
         if (strchr(ALPHABET, toupper(str[i])) != nullptr) {
             _number[_sz - i - 1] = toupper(str[i]);
@@ -71,7 +71,6 @@ Twelve::Twelve(Twelve&& other) noexcept : _sz(other._sz), _number(other._number)
 // }
 
 Twelve::~Twelve() noexcept {
-    _sz = 0;
     delete[] _number;
     _number = nullptr;
 }  
@@ -79,6 +78,7 @@ Twelve::~Twelve() noexcept {
 //----------------------------------------------
 // Methods TODO
 
+// friend operator<<
 std::ostream& Twelve::print(std::ostream& os) {
     for (size_t i = 0; i < _sz; ++i) {
         os << _number[_sz - i - 1];
@@ -86,7 +86,7 @@ std::ostream& Twelve::print(std::ostream& os) {
     return os;
 }
 
-bool Twelve::is_bigger(Twelve& other) {
+bool Twelve::is_bigger(Twelve const& other) const {
     if (_sz > other._sz) {
         return true;
     } else if (_sz < other._sz) {
