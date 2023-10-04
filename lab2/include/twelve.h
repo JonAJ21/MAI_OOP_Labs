@@ -5,7 +5,7 @@
 
 class Twelve final {
 private:
-    const char* ALPHABET = "0123456789AB"; // Вопрос про static
+    static char const ALPHABET[];
     unsigned char* _number;
     size_t _sz;
 public:
@@ -14,10 +14,10 @@ public:
 
     // Assignment constructors
     Twelve();
-    Twelve(const std::initializer_list<unsigned char>& init_list);
-    Twelve(const std::string& str);
+    Twelve(std::initializer_list<unsigned char> const & init_list);
+    Twelve(std::string const & str);
     // Copy constructor
-    Twelve(const Twelve& other);
+    Twelve(Twelve const & other);
     // Move constructor
     Twelve(Twelve&& other) noexcept;
     // Move assignment operator
@@ -28,32 +28,33 @@ public:
 
     //----------------------------------------------
     // Methods
-    
-    std::ostream& print(std::ostream& os);
+
+    bool is_equal(Twelve const & other) const;
+    // bool is_equal(Twelve& lhs, Twelve& rhs);
 
     bool is_bigger(Twelve const & other) const;
     // bool is_bigger(Twelve& lhs, Twelve& rhs);
     
-    bool is_smaller(Twelve& other);
+    bool is_smaller(Twelve const & other) const;
     // bool is_smaller(Twelve& lhs, Twelve& rhs);
-    
-    bool is_equal(Twelve& other);
-    // bool is_equal(Twelve& lhs, Twelve& rhs);
 
-    Twelve add(Twelve& other);
+    Twelve add(Twelve const & other) const;
     // Twelve add(Twelve& lhs, Twelve& rhs);
 
-    Twelve substract(Twelve& other);
+    Twelve substract(Twelve const & other) const;
     // Twelve substarct(Twelve& lhs, Twelve& rhs);
+
+    // Friend
+    friend std::ostream& operator<<(std::ostream& os, Twelve const & t);
 };
 
 #endif // TWELVE_H
 
-//Переписать  для print cout, cin
-// Переписать is smaller is bigger(сделать проще)
-// убрать лишние try catch
-// Alphabet должен быть static
+//Переписать print cout << +
+// Переписать is smaller is bigger(сделать проще) +-
+// убрать лишние try catch +
+// Alphabet должен быть static +
 
-// Сократить toupper от 2 использований до 1
+// Сократить toupper от 2 использований до 1 + 
 // Попросить пример с The rule of five
-// При объявлении конструкторов добавить const в конце, если не меняется
+// При объявлении конструкторов добавить const в конце, если не меняется +

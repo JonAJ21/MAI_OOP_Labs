@@ -3,16 +3,14 @@
 
 int main() {
 
-    Twelve x {"3224ba"};
-    Twelve y {'3', '2', '2', '4', 'b', 'b'};
+    Twelve x {"9a38b"};
+    Twelve y {"69a77"};
+    Twelve z = x.add(y);
 
-    x.print(std::cout) << std::endl;
-    y.print(std::cout) << std::endl;
-
-
-    std::cout << std::boolalpha << x.is_bigger(y) << std::endl;
-    std::cout << std::boolalpha << x.is_smaller(y) << std::endl;
-    std::cout << std::boolalpha << x.is_equal(y) << std::endl;
+    std::cout << x << ' ' << y  << ' ' << z << std::endl;
+    // std::cout << std::boolalpha << x.is_bigger(y) << std::endl;
+    // std::cout << std::boolalpha << x.is_smaller(y) << std::endl;
+    // std::cout << std::boolalpha << x.is_equal(y) << std::endl;
 
     x.~Twelve();
     y.~Twelve();
