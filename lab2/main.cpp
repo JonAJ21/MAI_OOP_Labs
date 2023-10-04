@@ -3,8 +3,8 @@
 
 int main() {
 
-    Twelve x {"9a38b"};
-    Twelve y {"69a77"};
+    Twelve x {"749812"};
+    Twelve y {"ab3718749128"};
     Twelve z = x.add(y);
 
     std::cout << x << ' ' << y  << ' ' << z << std::endl;

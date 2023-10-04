@@ -125,24 +125,35 @@ Twelve Twelve::add(Twelve const & other) const {
         std::cout << i << ' ' << sum << ' ' << carry << std::endl;
     }
     
+    // if (carry == 0) {
+    //     result._number = new unsigned char[sz + 1];
+    // } else {
+    //     std::cout << "Carry" << std::endl;
+    //     ++sz;
+    //     result._number = new unsigned char[sz + 1];
+    //     result._number[sz - 1] = ALPHABET[carry];
+    //     std::cout << "resnum: "<<  result._number[sz - 1] << std::endl;
+    // }
+    // result._sz = sz;
+    // for (size_t i = 0; i < sz; ++i) {
+    //     result._number[i] = number[i];
+    // }
+
+    // for (int i = 0; i < sz; ++i) {
+    //     std::cout << result._number[i] << std::endl;
+    // }
     if (carry == 0) {
         result._number = new unsigned char[sz + 1];
     } else {
         std::cout << "Carry" << std::endl;
-        ++sz;
-        result._number = new unsigned char[sz + 1];
+        result._number = new unsigned char[++sz + 1];
         result._number[sz - 1] = ALPHABET[carry];
-        std::cout << "resnum: "<<  result._number[sz - 1] << std::endl;
-
-        for (int i = 0; i < sz; ++i) {
-            std::cout << result._number[i] << std:: endl;
-        }
-
     }
     result._sz = sz;
-    for (size_t i = 0; i < sz; ++i) {
+    for (size_t i = 0; i < sz - carry; ++i) {
         result._number[i] = number[i];
     }
+
     result._number[sz] = '\0';
     delete[] number;
     return result;
