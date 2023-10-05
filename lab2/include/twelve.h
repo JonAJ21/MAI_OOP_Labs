@@ -20,9 +20,10 @@ public:
     Twelve(Twelve const & other);
     // Move constructor
     Twelve(Twelve&& other) noexcept;
+    // Copy assignment operator
+    Twelve& operator=(Twelve const & other);
     // Move assignment operator
-    Twelve& operator=(Twelve&& other); // ???????????
-    Twelve& operator=(Twelve const & other); // ???????????
+    Twelve& operator=(Twelve && other);
     // Destructor
     ~Twelve() noexcept;
 
@@ -30,21 +31,12 @@ public:
     // Methods
 
     bool is_equal(Twelve const & other) const;
-    // bool is_equal(Twelve& lhs, Twelve& rhs);
-
     bool is_bigger(Twelve const & other) const;
-    // bool is_bigger(Twelve& lhs, Twelve& rhs);
-    
     bool is_smaller(Twelve const & other) const;
-    // bool is_smaller(Twelve& lhs, Twelve& rhs);
 
     Twelve add(Twelve const & other) const;
-    // Twelve add(Twelve& lhs, Twelve& rhs);
-
     Twelve substract(Twelve const & other) const;
-    // Twelve substarct(Twelve& lhs, Twelve& rhs);
 
-    // Friend
     friend std::ostream& operator<<(std::ostream& os, Twelve const & t);
 };
 

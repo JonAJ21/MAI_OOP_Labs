@@ -8,11 +8,12 @@ char const Twelve::ALPHABET[] = "0123456789AB";
 
 //----------------------------------------------
 // The rule of five
+
 Twelve::Twelve() : _sz(0), _number(nullptr) {
     std::cout << "Default constructor" << std::endl; 
 }
 
-Twelve::Twelve(const std::initializer_list<unsigned char>& init_list) : _sz(init_list.size()) {
+Twelve::Twelve(std::initializer_list<unsigned char> const & init_list) : _sz(init_list.size()) {
     std::cout << "Initializer list constructor" << std::endl;
     _number = new unsigned char[_sz + 1];
     size_t i = _sz;
@@ -26,7 +27,7 @@ Twelve::Twelve(const std::initializer_list<unsigned char>& init_list) : _sz(init
     _number[_sz] = '\0';
 }
 
-Twelve::Twelve(const std::string& str) : _sz(str.size()) {
+Twelve::Twelve(std::string const & str) : _sz(str.size()) {
     std::cout << "Copy string constructor" << std::endl;
     _number = new unsigned char[_sz + 1];
     for (size_t i = 0; i < _sz; ++i) {
@@ -39,7 +40,7 @@ Twelve::Twelve(const std::string& str) : _sz(str.size()) {
     _number[_sz] = '\0';
 }
 
-Twelve::Twelve(const Twelve& other) : _sz(other._sz) {
+Twelve::Twelve(Twelve const & other) : _sz(other._sz) {
     std::cout << "Copy constructor" << std::endl;
     _number = new unsigned char[_sz + 1];
     for (size_t i = 0; i < _sz; ++i) {
@@ -54,10 +55,19 @@ Twelve::Twelve(Twelve&& other) noexcept : _sz(other._sz), _number(other._number)
     other._number = nullptr;
 }
 
-// ????????????????????????
-// Twelve& Twelve::operator=(Twelve&& other) {
-//     //TODO
-// }
+Twelve& Twelve::operator=(Twelve const & other) {
+    _number = other._number;
+    _sz = other._sz;
+    std::cout << "Copy assigned" << std::endl;
+    return *this;
+}
+
+Twelve& Twelve::operator=(Twelve&& other) {
+    _number = std::move(other._number);
+    _sz = std::move(other._sz);
+    std::cout << "Move assigned" << std::endl;
+    return *this;
+}
 
 Twelve::~Twelve() noexcept {
     delete[] _number;
@@ -65,7 +75,7 @@ Twelve::~Twelve() noexcept {
 }  
 
 //----------------------------------------------
-// Methods TODO
+// Methods
 
 bool Twelve::is_equal(Twelve const & other) const {
     size_t sz = _sz > other._sz ? _sz : other._sz;
@@ -144,7 +154,14 @@ Twelve Twelve::substract(Twelve const & other) const {
         std::cout << "Error: negative answer (lhs < rhs)" << std::endl;
         throw "Error: negative answer";
     }
-
+    if (this->is_equal(other)) {
+        Twelve res;
+        res._sz = 1;
+        res._number = new unsigned char[res._sz + 1];
+        res._number[0] = '0';
+        res._number[res._sz] = '\0';
+        return res;
+    }
     Twelve num {*this};
     int carry = 0;
     int digit_1;
@@ -181,8 +198,6 @@ Twelve Twelve::substract(Twelve const & other) const {
     num.~Twelve();
     return res;
 }
-
-// Friend
 
 std::ostream& operator<<(std::ostream& os, Twelve const & t) {
     for (size_t i = 0; i < t._sz; ++i) {
