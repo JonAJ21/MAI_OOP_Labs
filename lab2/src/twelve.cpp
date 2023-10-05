@@ -107,7 +107,6 @@ Twelve Twelve::add(Twelve const & other) const {
     int digit_1;
     int digit_2;
     int carry = 0;
-    std::cout << "sz: "<< sz << std::endl;
     for (size_t i = 0; i < sz; ++i) {
         if (i < _sz) {
             digit_1 = isdigit(_number[i]) ? _number[i] - '0' : _number[i] - 'A' + 10;
@@ -122,30 +121,11 @@ Twelve Twelve::add(Twelve const & other) const {
         int sum = digit_1 + digit_2 + carry;
         number[i] = ALPHABET[sum % (sizeof(ALPHABET) - 1)];
         carry = sum / (sizeof(ALPHABET) - 1);
-        std::cout << i << ' ' << sum << ' ' << carry << std::endl;
     }
-    
-    // if (carry == 0) {
-    //     result._number = new unsigned char[sz + 1];
-    // } else {
-    //     std::cout << "Carry" << std::endl;
-    //     ++sz;
-    //     result._number = new unsigned char[sz + 1];
-    //     result._number[sz - 1] = ALPHABET[carry];
-    //     std::cout << "resnum: "<<  result._number[sz - 1] << std::endl;
-    // }
-    // result._sz = sz;
-    // for (size_t i = 0; i < sz; ++i) {
-    //     result._number[i] = number[i];
-    // }
-
-    // for (int i = 0; i < sz; ++i) {
-    //     std::cout << result._number[i] << std::endl;
-    // }
     if (carry == 0) {
         result._number = new unsigned char[sz + 1];
     } else {
-        std::cout << "Carry" << std::endl;
+        
         result._number = new unsigned char[++sz + 1];
         result._number[sz - 1] = ALPHABET[carry];
     }
@@ -159,6 +139,48 @@ Twelve Twelve::add(Twelve const & other) const {
     return result;
 }
 
+Twelve Twelve::substract(Twelve const & other) const {
+    if (this->is_smaller(other)) {
+        std::cout << "Error: negative answer (lhs < rhs)" << std::endl;
+        throw "Error: negative answer";
+    }
+
+    Twelve num {*this};
+    int carry = 0;
+    int digit_1;
+    int digit_2;
+    for (size_t i = 0; i < other._sz || carry; ++i) {
+        if (i < other._sz) {
+            digit_2 = isdigit(other._number[i]) ? other._number[i] - '0' : other._number[i] - 'A' + 10;
+        } else {
+            digit_2 = 0;
+        }
+        digit_1 = isdigit(num._number[i]) ? num._number[i] - '0' : num._number[i] - 'A' + 10;
+        digit_1 -= carry + digit_2;
+        num._number[i] = ALPHABET[digit_1];
+        carry = digit_1 < 0;
+        if (carry) {
+            digit_1 += sizeof(ALPHABET) - 1;
+            num._number[i] = ALPHABET[digit_1];
+        }
+    }
+    size_t count = 0;
+    for (size_t i = 0; i < _sz; ++i) {
+        if (num._number[_sz - i - 1] != '0') {
+            break;
+        }
+        ++count;   
+    }
+    Twelve res;
+    res._sz = _sz - count;
+    res._number = new unsigned char[res._sz + 1];
+    res._number[res._sz] = '\0';
+    for (int i = 0; i < res._sz; ++i) {
+        res._number[i] = num._number[i];
+    }
+    num.~Twelve();
+    return res;
+}
 
 // Friend
 

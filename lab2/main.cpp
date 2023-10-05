@@ -3,9 +3,9 @@
 
 int main() {
 
-    Twelve x {"749812"};
-    Twelve y {"ab3718749128"};
-    Twelve z = x.add(y);
+    Twelve x {"bbb"};
+    Twelve y {"bba"};
+    Twelve z = x.substract(y);
 
     std::cout << x << ' ' << y  << ' ' << z << std::endl;
     // std::cout << std::boolalpha << x.is_bigger(y) << std::endl;
@@ -14,5 +14,6 @@ int main() {
 
     x.~Twelve();
     y.~Twelve();
+    z.~Twelve();
     return 0;
 }
