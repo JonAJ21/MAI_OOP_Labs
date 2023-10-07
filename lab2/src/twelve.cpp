@@ -56,15 +56,23 @@ Twelve::Twelve(Twelve&& other) noexcept : _sz(other._sz), _number(other._number)
 }
 
 Twelve& Twelve::operator=(Twelve const & other) {
-    _number = other._number;
-    _sz = other._sz;
+    _sz = other._sz; 
+    _number = new unsigned char[_sz + 1];
+    for (size_t i = 0; i < _sz; ++i) {
+        _number[i] = other._number[i];
+    }
+    _number[_sz] = '\0';
     std::cout << "Copy assigned" << std::endl;
     return *this;
 }
 
 Twelve& Twelve::operator=(Twelve&& other) {
-    _number = std::move(other._number);
-    _sz = std::move(other._sz);
+    // _number = std::move(other._number);
+    // _sz = std::move(other._sz);
+    _number = other._number;
+    _sz = other._sz;
+    other._sz = 0;
+    other._number = nullptr;
     std::cout << "Move assigned" << std::endl;
     return *this;
 }
@@ -76,6 +84,15 @@ Twelve::~Twelve() noexcept {
 
 //----------------------------------------------
 // Methods
+
+size_t Twelve::get_sz() const {
+    return this->_sz;
+}
+
+unsigned char* Twelve::get_number() const {
+    return this->_number;
+}
+
 
 bool Twelve::is_equal(Twelve const & other) const {
     size_t sz = _sz > other._sz ? _sz : other._sz;

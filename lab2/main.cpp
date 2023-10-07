@@ -3,7 +3,7 @@
 
 int main() {
     
-    Twelve a {"31b41aa"};
+    Twelve a {"1b41aa"};
     Twelve b {"3baba"};
     Twelve c = a;
     Twelve d = a.substract(b);

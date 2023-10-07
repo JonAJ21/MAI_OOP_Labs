@@ -23,12 +23,15 @@ public:
     // Copy assignment operator
     Twelve& operator=(Twelve const & other);
     // Move assignment operator
-    Twelve& operator=(Twelve && other);
+    Twelve& operator=(Twelve&& other);
     // Destructor
     ~Twelve() noexcept;
 
     //----------------------------------------------
     // Methods
+
+    size_t get_sz() const;
+    unsigned char* get_number() const;
 
     bool is_equal(Twelve const & other) const;
     bool is_bigger(Twelve const & other) const;
@@ -41,12 +44,3 @@ public:
 };
 
 #endif // TWELVE_H
-
-//Переписать print cout << +
-// Переписать is smaller is bigger(сделать проще) +-
-// убрать лишние try catch +
-// Alphabet должен быть static +
-
-// Сократить toupper от 2 использований до 1 + 
-// Попросить пример с The rule of five
-// При объявлении конструкторов добавить const в конце, если не меняется +

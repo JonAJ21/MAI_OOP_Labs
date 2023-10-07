@@ -1,40 +1,134 @@
 #include <gtest/gtest.h>
 #include "twelve.h"
 
-// TEST(Twelve, Initializations) {
-//     // Twelve t1 = { 'C', 'A', '3' };
-//     // Twelve t2 = Twelve(3, 'A');
-//     // Twelve t3 = Twelve();
-//     // Twelve t4 = Twelve(0, 'A');
+TEST(assignment_constructors, All) {
+    Twelve t_1;
+
+    ASSERT_TRUE(t_1.get_sz() == 0 && t_1.get_number() == nullptr);
     
-//     // // ASSERT_TRUE(t3 == t4);
+    Twelve t_2 {'a','b', '9','2'};
+    ASSERT_TRUE(t_2.get_sz() == 4);
+    ASSERT_TRUE(t_2.get_number()[0] == '2');
+    ASSERT_TRUE(t_2.get_number()[1] == '9');
+    ASSERT_TRUE(t_2.get_number()[2] == 'B');
+    ASSERT_TRUE(t_2.get_number()[3] == 'A');
 
-//     // t4 = t2;
-//     // ASSERT_TRUE(t4 == t2);
+    Twelve t_3 {"1a6b2"};
+    ASSERT_TRUE(t_3.get_sz() == 5);
+    ASSERT_TRUE(t_3.get_number()[0] == '2');
+    ASSERT_TRUE(t_3.get_number()[1] == 'B');
+    ASSERT_TRUE(t_3.get_number()[2] == '6');
+    ASSERT_TRUE(t_3.get_number()[3] == 'A');
+    ASSERT_TRUE(t_3.get_number()[4] == '1');
 
-//     // t2 = std::move(t1);
-//     // ASSERT_TRUE(t1.is_empty());
-//     // ASSERT_TRUE(t4 != t2);
+    t_1.~Twelve();
+    t_2.~Twelve();
+    t_3.~Twelve();
+}
 
-//     // Twelve t5 = Twelve(t4);
-//     // Twelve t6 = Twelve(std::move(t4));
-//     // ASSERT_TRUE(t4.is_empty());
-//     // ASSERT_TRUE(t5 == t6);
-// }
+TEST(copy_constructor, All) {
+    Twelve t_1 {"aba3131"};
+    Twelve t_2 {t_1};
 
-// TEST(Twelve, Addition) {
-//     Twelve t1 = { '8', 'A' };
-//     Twelve t2 = { 'A', 'B' };
+    ASSERT_TRUE(t_1.is_equal(t_2));
+    ASSERT_TRUE(&t_1 != &t_2);
+    
+    t_1.~Twelve();
+    t_2.~Twelve();
+}
 
-//     Twelve t3 = std::string("168");
-//     Twelve t4 = t1 + t2;
-//     ASSERT_TRUE(t4 == t3);
+TEST(move_constructor, All) {
+    Twelve t_1 {"90ab7"};
+    Twelve t_2 {std::move(t_1)};
 
-//     Twelve ta = { 'A' };
-//     t1 = { '1' };
-//     Twelve tb = { 'B' };
-//     ASSERT_TRUE(ta + t1 == tb);
-// }
+    ASSERT_TRUE(t_1.get_sz() == 0 && t_1.get_number() == nullptr);
+
+    ASSERT_TRUE(t_2.get_sz() == 5);
+    ASSERT_TRUE(t_2.get_number()[0] == '7');
+    ASSERT_TRUE(t_2.get_number()[1] == 'B');
+    ASSERT_TRUE(t_2.get_number()[2] == 'A');
+    ASSERT_TRUE(t_2.get_number()[3] == '0');
+    ASSERT_TRUE(t_2.get_number()[4] == '9');
+
+    t_1.~Twelve();
+    t_2.~Twelve();
+}
+
+
+TEST(copy_assigned_operator, All) {
+    Twelve t_1 {"90ab7"};
+    Twelve t_2;
+    t_2 = t_1;
+
+    ASSERT_TRUE(t_1.is_equal(t_2));
+    
+    t_1.~Twelve();
+    t_2.~Twelve();
+}
+
+TEST(move_assigned_operator, All) {
+    Twelve t_1 {"90ab7"};
+    Twelve t_2;
+    t_2 = std::move(t_1);
+
+    ASSERT_TRUE(t_2.get_sz() == 5);
+    ASSERT_TRUE(t_2.get_number()[0] == '7');
+    ASSERT_TRUE(t_2.get_number()[1] == 'B');
+    ASSERT_TRUE(t_2.get_number()[2] == 'A');
+    ASSERT_TRUE(t_2.get_number()[3] == '0');
+    ASSERT_TRUE(t_2.get_number()[4] == '9');
+    
+    t_1.~Twelve();
+    t_2.~Twelve();
+}
+
+TEST(comparisons, All) {
+    Twelve t_1 {"90ab7"};
+    Twelve t_2 {"319000"};
+    Twelve t_3 {"90ab7"};
+
+    ASSERT_TRUE(t_1.is_equal(t_2) == false);
+    ASSERT_TRUE(t_1.is_equal(t_3) == true);
+    ASSERT_TRUE(t_2.is_equal(t_3) == false);
+
+    ASSERT_TRUE(t_1.is_bigger(t_2) == false);
+    ASSERT_TRUE(t_1.is_bigger(t_3) == false);
+    ASSERT_TRUE(t_2.is_bigger(t_3) == true);
+
+    ASSERT_TRUE(t_1.is_smaller(t_2) == true);
+    ASSERT_TRUE(t_1.is_smaller(t_3) == false);
+    ASSERT_TRUE(t_2.is_smaller(t_3) == false);
+
+    t_1.~Twelve();
+    t_2.~Twelve();
+    t_3.~Twelve();
+}
+
+
+TEST(math_operations, All) {
+    Twelve t_1 {"90ab7"};
+    Twelve t_2 {"319000"};
+    Twelve t_3 {"90ab7"};
+
+    Twelve res_1 = {"3a9ab7"};
+    Twelve res_2 = {"1619b2"};
+
+    ASSERT_TRUE(t_1.add(t_2).is_equal(res_1));
+    ASSERT_TRUE(t_1.add(t_3).is_equal(res_2));
+    ASSERT_TRUE(t_2.add(t_3).is_equal(res_1));
+
+    res_1 = {"248105"};
+    res_2 = {'0'};
+
+    ASSERT_TRUE(t_2.substract(t_3).is_equal(res_1));
+    ASSERT_TRUE(t_1.substract(t_3).is_equal(res_2));
+
+    t_1.~Twelve();
+    t_2.~Twelve();
+    t_3.~Twelve();
+    res_1.~Twelve();
+    res_2.~Twelve();
+}
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
