@@ -66,7 +66,7 @@ Twelve& Twelve::operator=(Twelve const & other) {
     return *this;
 }
 
-Twelve& Twelve::operator=(Twelve&& other) {
+Twelve& Twelve::operator=(Twelve&& other) noexcept {
     // _number = std::move(other._number);
     // _sz = std::move(other._sz);
     _number = other._number;
@@ -127,14 +127,15 @@ bool Twelve::is_smaller(Twelve const & other) const {
     return !(this->is_equal(other) || this->is_bigger(other));
 }
 
-Twelve Twelve::add(Twelve const & other) const {
-    Twelve result;
-    size_t sz = _sz > other._sz ? _sz : other._sz;
-    unsigned char* number = new unsigned char[sz + 1];
+
+Twelve Twelve::add(const Twelve & other) const {
+    Twelve num;
+    num._sz = _sz > other._sz ? _sz : other._sz;
+    num._number = new unsigned char[num._sz + 1];
     int digit_1;
     int digit_2;
     int carry = 0;
-    for (size_t i = 0; i < sz; ++i) {
+    for (size_t i = 0; i < num._sz; ++i) {
         if (i < _sz) {
             digit_1 = isdigit(_number[i]) ? _number[i] - '0' : _number[i] - 'A' + 10;
         } else {
@@ -146,25 +147,28 @@ Twelve Twelve::add(Twelve const & other) const {
             digit_2 = 0;
         }
         int sum = digit_1 + digit_2 + carry;
-        number[i] = ALPHABET[sum % (sizeof(ALPHABET) - 1)];
+        num._number[i] = ALPHABET[sum % (sizeof(ALPHABET) - 1)];
         carry = sum / (sizeof(ALPHABET) - 1);
     }
+    Twelve res;
     if (carry == 0) {
-        result._number = new unsigned char[sz + 1];
-    } else {
-        
-        result._number = new unsigned char[++sz + 1];
-        result._number[sz - 1] = ALPHABET[carry];
+        res = std::move(num);
+        res._number[res._sz] = '\0';
+        num.~Twelve();
+        return res;
     }
-    result._sz = sz;
-    for (size_t i = 0; i < sz - carry; ++i) {
-        result._number[i] = number[i];
+    res._sz = num._sz + 1;
+    res._number = new unsigned char[res._sz + 1];
+    res._number[res._sz - 1] = ALPHABET[carry];
+    for (size_t i = 0; i < res._sz - carry; ++i) {
+        res._number[i] = num._number[i];
     }
-
-    result._number[sz] = '\0';
-    delete[] number;
-    return result;
+    res._number[res._sz] = '\0';
+    num.~Twelve();
+    return res; 
 }
+
+
 
 Twelve Twelve::substract(Twelve const & other) const {
     if (this->is_smaller(other)) {

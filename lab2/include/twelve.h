@@ -23,7 +23,7 @@ public:
     // Copy assignment operator
     Twelve& operator=(Twelve const & other);
     // Move assignment operator
-    Twelve& operator=(Twelve&& other);
+    Twelve& operator=(Twelve&& other) noexcept;
     // Destructor
     ~Twelve() noexcept;
 

@@ -3,26 +3,26 @@
 
 int main() {
     
-    Twelve a {"1b41aa"};
-    Twelve b {"3baba"};
+    Twelve a {"90ab7"};
+    Twelve b {"319000"};
     Twelve c = a;
-    Twelve d = a.substract(b);
-    Twelve e = a.substract(c);
+    // Twelve d = a.substract(b);
+    // Twelve e = a.substract(c);
     Twelve f = a.add(b);
     Twelve g = a.add(a);
     
     std::cout << &a << ' ' << &b << ' ' << &c << std::endl;
-    std::cout << a << " - " << b << " = " << d << std::endl;
-    std::cout << a << " - " << c << " = " << e << std::endl;
+    // std::cout << a << " - " << b << " = " << d << std::endl;
+    // std::cout << a << " - " << c << " = " << e << std::endl;
     std::cout << a << " + " << b << " = " << f << std::endl;
     std::cout << a << " + " << c << " = " << g << std::endl;
-    std::cout << e << std::endl;
+    // std::cout << e << std::endl;
     
     a.~Twelve();
     b.~Twelve();
     c.~Twelve();
-    d.~Twelve();
-    e.~Twelve();
+    // d.~Twelve();
+    // e.~Twelve();
     f.~Twelve();
     g.~Twelve();
     return 0;
