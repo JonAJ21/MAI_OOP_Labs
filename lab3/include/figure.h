@@ -2,26 +2,22 @@
 #define FIGURE_H
 
 #include <iostream>
+#include <cmath>
 
 class Figure {
-private:
-    double* coords;
-    double area;
 public:
-    Figure();
-    Figure(int const * coords);
-    Figure(Figure const & fig);
-    Figure(Figure&& fig) noexcept;
-    Figure& operator=(Figure const & fig); 
-    Figure& operator=(Figure&& fig) noexcept;
-    virtual ~Figure();
-    
-    double* get_coords() const;
+    struct Point2D {
+        double x, y;
+    };
 
-    virtual double area() const;
+    virtual ~Figure() noexcept = default;
 
-    friend std::ostream& operator<<(std::ostream& os, Figure const & t);
-    friend std::istream& operator<<(std::istream& os, Figure const & t);
+    virtual Point2D center() const noexcept = 0;
+    virtual double area() const noexcept = 0;
+    explicit virtual operator double() const noexcept = 0;
+
+    // friend std::istream& operator>>(std::istream& is, Figure & fig);
+    // friend std::ostream& operator<<(std::ostream& os, Figure const & fig);
 };
 
 #endif // FIGURE_H
