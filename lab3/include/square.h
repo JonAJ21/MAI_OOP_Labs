@@ -10,7 +10,6 @@ private:
     Point2D _third;
     Point2D _fourth;
 
-
     bool is_square(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) const;
 
 public:
