@@ -49,7 +49,7 @@ Rectangle::Rectangle(Point2D const & first, Point2D const & second, Point2D cons
     std::cout << "Init_list constructor" << std::endl;
 
     if (!is_rectangle(first, second, third, fourth)) {
-        throw std::invalid_argument("It is not a square");
+        throw std::invalid_argument("It is not a rectangle");
     }
 
     _first = first;
@@ -96,7 +96,6 @@ Rectangle& Rectangle::operator=(Rectangle&& rec) noexcept {
 
 Rectangle::~Rectangle() noexcept {
     std::cout << "Destructor" << std::endl;
-    // Хз, что здесь писать
 }
 
 Rectangle::Point2D Rectangle::center() const noexcept {
@@ -139,7 +138,7 @@ std::istream& operator>>(std::istream& is, Rectangle& rec) {
     is >> fourth.x >> fourth.y;
 
     if (!rec.is_rectangle(first, second, third, fourth)) {
-        throw std::invalid_argument("It is not a square");
+        throw std::invalid_argument("It is not a rectangle");
     }
     rec._first = first;
     rec._second = second;

@@ -15,10 +15,10 @@ private:
 public:
     explicit Rectangle();
     explicit Rectangle(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth);
-    explicit Rectangle(Rectangle const & sq);
-    explicit Rectangle(Rectangle&& sq);
-    Rectangle& operator=(Rectangle const & sq) noexcept;
-    Rectangle& operator=(Rectangle&& sq) noexcept;
+    explicit Rectangle(Rectangle const & rec);
+    explicit Rectangle(Rectangle&& rec);
+    Rectangle& operator=(Rectangle const & rec) noexcept;
+    Rectangle& operator=(Rectangle&& rec) noexcept;
     ~Rectangle() noexcept;
 
     Point2D center() const noexcept override;
@@ -30,4 +30,4 @@ public:
 };
 
 
-#endif // SQUARE_H
+#endif // RECTANGLE_H

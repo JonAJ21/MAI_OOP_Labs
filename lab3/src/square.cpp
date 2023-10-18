@@ -96,7 +96,6 @@ Square& Square::operator=(Square&& sq) noexcept {
 
 Square::~Square() noexcept {
     std::cout << "Destructor" << std::endl;
-    // Хз, что здесь писать
 }
 
 Square::Point2D Square::center() const noexcept {
