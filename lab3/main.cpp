@@ -6,17 +6,8 @@
 #include <typeinfo>
 int main() {
     
-    // Figure* figures = new Square({0, 0}, {0, 1}, {1, 1}, {1, 0});
-    // std::cout << figures->area() << std::endl;
-    Figure** figures = new Figure* [2];
-    figures[0] = new Square({0, 0}, {0, 1}, {1, 1}, {1, 0});
-    figures[1] = new Rectangle({0, 0}, {0, 2}, {3, 2}, {3, 0});
-    // for (int i = 0; i < 2; ++i) {
-    //     // std::cout << *figures[0] << std::endl;
-    // }
-    Square sq = *figures[0];
-
-
+   Trapezoid a({1,1}, {3,7}, {6,7}, {10,1});
+//    std::cout << (double) a << std::cout;
 
     return 0;
 }  

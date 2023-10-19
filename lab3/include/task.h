@@ -28,11 +28,8 @@ public:
 
     void enter_figures();
 
-
     // TODO
     // Операции сравнения
-
-
 };
 
 #endif // TASK_H

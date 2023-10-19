@@ -2,8 +2,13 @@
 
 
 bool Trapezoid::is_trapezoid(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) const {
-   // TODO
-   return true;
+   // Points must be in traversal order
+    if (first.x == second.x && second.x == third.x) return false;
+    if (first.y == second.y && second.y == third.y) return false;
+    if (Figure::are_sides_parallel(first, second, third, fourth)) {
+        return !(Figure::are_sides_parallel(second, third, fourth, first));
+    }
+    return are_sides_parallel(second, third, fourth, first);
 }
 
 Trapezoid::Trapezoid() : _first({0, 0}), _second({0, 0}), _third({0, 0}), _fourth({0, 0}) {
@@ -64,11 +69,9 @@ Trapezoid& Trapezoid::operator=(Trapezoid&& tr) noexcept {
     return *this;
 }
 
-
 Trapezoid::~Trapezoid() noexcept {
     std::cout << "Destructor" << std::endl;
 }
-
 
 Trapezoid::Point2D Trapezoid::center() const noexcept{
     Point2D center;
@@ -78,8 +81,20 @@ Trapezoid::Point2D Trapezoid::center() const noexcept{
 };
 
 double Trapezoid::area() const noexcept{
-    // TODO
-    return 0;
+    double a, b, c, d;
+    if (are_sides_parallel(_first, _second, _third, _fourth)) {
+        a = get_len(_third, _fourth);
+        b = get_len(_first, _second);
+        c = get_len(_first, _fourth);
+        d = get_len(_second, _third);
+    } else {
+        a = get_len(_first, _fourth);
+        b = get_len(_second, _third);
+        c = get_len(_first, _second);
+        d = get_len(_third, _fourth);
+    }
+    double height = sqrt((c * c) - ((((a - b) * (a - b) + c * c - d * d)/(2 * (a - b))) * (((a - b) * (a - b) + c * c - d * d)/(2 * (a - b)))));
+    return (a + b) * height * 0.5;
 };
 
 Trapezoid::operator double() const noexcept {
