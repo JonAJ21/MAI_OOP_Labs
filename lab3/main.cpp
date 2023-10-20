@@ -5,9 +5,10 @@
 #include "trapezoid.h"
 #include <typeinfo>
 int main() {
-    
-   Trapezoid a({1,1}, {3,7}, {6,7}, {10,1});
-//    std::cout << (double) a << std::cout;
+   Square s1 {{0,0}, {1,0}, {1,1}, {0,1}}; 
+   Square s2 {{0,0}, {2,0}, {2,2}, {0,2}}; 
+   bool x = s1 == s2;
+   std::cout << x << std::endl;
 
     return 0;
 }  

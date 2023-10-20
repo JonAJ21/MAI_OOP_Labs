@@ -24,6 +24,7 @@ public:
     Point2D center() const noexcept override;
     double area() const noexcept override;
     explicit operator double() const noexcept override;
+    bool operator==(Square const & sq);
 
     friend std::istream& operator>>(std::istream& is, Square & sq);
     friend std::ostream& operator<<(std::ostream& os, Square const & sq); 

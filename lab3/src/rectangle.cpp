@@ -2,26 +2,15 @@
 
 bool Rectangle::is_rectangle(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) const {
     double lens[6];
-    lens[0] = sqrt((first.x - second.x) * (first.x - second.x)
-                 + (first.y - second.y) * (first.y - second.y));
-    lens[1] = sqrt((first.x - third.x) * (first.x - third.x)
-                 + (first.y - third.y) * (first.y - third.y));
-    lens[2] = sqrt((first.x - fourth.x) * (first.x - fourth.x)
-                 + (first.y - fourth.y) * (first.y - fourth.y));
-    
-    lens[3] = sqrt((second.x - third.x) * (second.x - third.x)
-                 + (second.y - third.y) * (second.y - third.y));
-    lens[4] = sqrt((second.x - fourth.x) * (second.x - fourth.x)
-                 + (second.y - fourth.y) * (second.y - fourth.y));
-
-    lens[5] = sqrt((third.x - fourth.x) * (third.x - fourth.x)
-                 + (third.y - fourth.y) * (third.y - fourth.y));               
+    lens[0] = get_len(first, second);
+    lens[1] = get_len(first, third);   
+    lens[2] = get_len(first, fourth);   
+    lens[3] = get_len(second, third);   
+    lens[4] = get_len(second, fourth);   
+    lens[5] = get_len(third, fourth);              
     
     // Machine epsilon
-    double epsilon = 1.0;
-    while (1.0 + epsilon > 1.0) {
-        epsilon = epsilon / 2.0;
-    }
+    double epsilon = get_machine_epsilon();
     
     // Bubble sort
     for (size_t i = 0; i < 5; ++i) {
@@ -106,12 +95,10 @@ Rectangle::Point2D Rectangle::center() const noexcept {
 }
 
 double Rectangle::area() const noexcept {
-    double len_1 = sqrt((_first.x - _second.x) * (_first.x - _second.x)
-                      + (_first.y - _second.y) * (_first.y - _second.y));
-    double len_2 = sqrt((_first.x - _third.x) * (_first.x - _third.x)
-                      + (_first.y - _third.y) * (_first.y - _third.y));
-    double len_3 = sqrt((_first.x - _fourth.x) * (_first.x - _fourth.x)
-                      + (_first.y - _fourth.y) * (_first.y - _fourth.y));
+    double len_1 = get_len(_first, _second);
+    double len_2 = get_len(_first, _third);
+    double len_3 = get_len(_first, _fourth);
+    
     double a, b;
     if (len_1 <= len_2 && len_1 <= len_3) a = len_1;
     if (len_2 <= len_1 && len_2 <= len_3) a = len_2;
@@ -128,6 +115,10 @@ Rectangle::operator double() const noexcept {
     return area();
 }
 
+bool Rectangle::operator==(Rectangle const & rec) {
+    //TODO
+    return true;
+}
 
 std::istream& operator>>(std::istream& is, Rectangle& rec) {
     Rectangle::Point2D first, second, third, fourth;

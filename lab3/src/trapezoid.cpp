@@ -5,8 +5,8 @@ bool Trapezoid::is_trapezoid(Point2D const & first, Point2D const & second, Poin
    // Points must be in traversal order
     if (first.x == second.x && second.x == third.x) return false;
     if (first.y == second.y && second.y == third.y) return false;
-    if (Figure::are_sides_parallel(first, second, third, fourth)) {
-        return !(Figure::are_sides_parallel(second, third, fourth, first));
+    if (are_sides_parallel(first, second, third, fourth)) {
+        return !(are_sides_parallel(second, third, fourth, first));
     }
     return are_sides_parallel(second, third, fourth, first);
 }
@@ -100,6 +100,11 @@ double Trapezoid::area() const noexcept{
 Trapezoid::operator double() const noexcept {
     return area();
 };
+
+bool Trapezoid::operator==(Trapezoid const & tr) {
+    //TODO
+    return true;
+}
 
 std::istream& operator>>(std::istream& is, Trapezoid& tr) {
     Trapezoid::Point2D first, second, third, fourth;

@@ -24,6 +24,7 @@ public:
     Point2D center() const noexcept override;
     double area() const noexcept override;
     explicit operator double() const noexcept override;
+    bool operator==(Rectangle const & rec);
 
     friend std::istream& operator>>(std::istream& is, Rectangle & rec);
     friend std::ostream& operator<<(std::ostream& os, Rectangle const & rec); 

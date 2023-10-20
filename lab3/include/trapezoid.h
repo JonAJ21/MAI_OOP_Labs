@@ -24,6 +24,8 @@ public:
     Point2D center() const noexcept override;
     double area() const noexcept override;
     explicit operator double() const noexcept override;
+    bool operator==(Trapezoid const & tr);
+
 
     friend std::istream& operator>>(std::istream& is, Trapezoid & tr);
     friend std::ostream& operator<<(std::ostream& os, Trapezoid const & tr); 
