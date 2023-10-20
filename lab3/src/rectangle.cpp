@@ -8,10 +8,6 @@ bool Rectangle::is_rectangle(Point2D const & first, Point2D const & second, Poin
     lens[3] = get_len(second, third);   
     lens[4] = get_len(second, fourth);   
     lens[5] = get_len(third, fourth);              
-    
-    // Machine epsilon
-    double epsilon = get_machine_epsilon();
-    
     // Bubble sort
     for (size_t i = 0; i < 5; ++i) {
         int swapped = 0;
@@ -25,17 +21,12 @@ bool Rectangle::is_rectangle(Point2D const & first, Point2D const & second, Poin
         }
         if (swapped == 0) break;
     }
-    return ((lens[1] - lens[0] < epsilon) && (lens[3] - lens[2] < epsilon) && (lens[5] - lens[4] < epsilon) &&
-            (lens[4] - sqrt(lens[0] * lens[0] + lens[2] * lens[2]) < epsilon));
-}
-
-
-Rectangle::Rectangle() : _first({0, 0}), _second({0, 0}), _third({0, 0}), _fourth({0, 0}) {
-    std::cout << "Default constructor" << std::endl;
+    return (are_equal(lens[0], lens[1], 1e-6) && are_equal(lens[2], lens[3], 1e-6) && are_equal(lens[4], lens[5], 1e-6) &&
+            are_equal(lens[4], sqrt(lens[0] * lens[0] + lens[2] * lens[2]), 1e-6));
 }
 
 Rectangle::Rectangle(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) {
-    std::cout << "Init_list constructor" << std::endl;
+    // std::cout << "Init_list constructor" << std::endl;
 
     if (!is_rectangle(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a rectangle");
@@ -45,46 +36,6 @@ Rectangle::Rectangle(Point2D const & first, Point2D const & second, Point2D cons
     _second = second;
     _third = third;
     _fourth = fourth;
-}
-
-Rectangle::Rectangle(Rectangle const & rec) : _first(rec._first), _second(rec._second), _third(rec._third), _fourth(rec._fourth) {
-    std::cout << "Copy constructor" << std::endl;
-}
-
-Rectangle::Rectangle(Rectangle&& rec) : _first(rec._first), _second(rec._second), _third(rec._third), _fourth(rec._fourth) {
-    std::cout << "Move constructor" << std::endl;
-    rec._first = {0, 0};
-    rec._second = {0, 0};
-    rec._third = {0, 0};
-    rec._fourth = {0, 0};
-}
-
-Rectangle& Rectangle::operator=(Rectangle const & rec) noexcept {
-    std::cout << "Copy assignment operator" << std::endl;
-    if (this == &rec) {
-        return *this;
-    }
-    _first = rec._first;
-    _second = rec._second;
-    _third = rec._third;
-    _fourth = rec._fourth;
-    return *this;
-}
-
-Rectangle& Rectangle::operator=(Rectangle&& rec) noexcept {
-    std::cout << "Move assignment operator" << std::endl;
-    if (this == &rec) {
-        return *this;
-    }
-    rec._first = {0, 0};
-    rec._second = {0, 0};
-    rec._third = {0, 0};
-    rec._fourth = {0, 0};
-    return *this;
-}
-
-Rectangle::~Rectangle() noexcept {
-    std::cout << "Destructor" << std::endl;
 }
 
 Rectangle::Point2D Rectangle::center() const noexcept {
@@ -116,18 +67,18 @@ Rectangle::operator double() const noexcept {
 }
 
 bool Rectangle::operator==(Rectangle const & rec) {
-    //TODO
-    return true;
+    return (_first.x == rec._first.x && _first.y == rec._first.x && 
+            _second.x == rec._second.x && _second.y == rec._second.y && 
+            _third.x == rec._third.x && _third.y == rec._third.y && 
+            _fourth.x == rec._fourth.x && _fourth.y == rec._fourth.y);
 }
 
 std::istream& operator>>(std::istream& is, Rectangle& rec) {
     Rectangle::Point2D first, second, third, fourth;
-
     is >> first.x >> first.y;
     is >> second.x >> second.y;
     is >> third.x >> third.y;
     is >> fourth.x >> fourth.y;
-
     if (!rec.is_rectangle(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a rectangle");
     }

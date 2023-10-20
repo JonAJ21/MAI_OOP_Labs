@@ -10,9 +10,6 @@ bool Square::is_square(Point2D const & first, Point2D const & second, Point2D co
     lens[4] = get_len(second, fourth);   
     lens[5] = get_len(third, fourth);            
     
-    // Machine epsilon
-    double epsilon = get_machine_epsilon();
-    
     // Bubble sort
     for (size_t i = 0; i < 5; ++i) {
         int swapped = 0;
@@ -26,17 +23,14 @@ bool Square::is_square(Point2D const & first, Point2D const & second, Point2D co
         }
         if (swapped == 0) break;
     }
-    return ((lens[1] - lens[0] < epsilon) && (lens[2] - lens[0] < epsilon) && (lens[3] - lens[0] < epsilon) &&
-            (lens[5] - lens[4] < epsilon) && (lens[4] - lens[0] * sqrt(2) < epsilon));
+
+    return (are_equal(lens[0], lens[1], 1e-6) && are_equal(lens[0], lens[2], 1e-6) && are_equal(lens[0], lens[3], 1e-6) &&
+            are_equal(lens[4], lens[5], 1e-6) && are_equal(lens[4], lens[0] * sqrt(2), 1e-6));
 }
 
-
-Square::Square() : _first({0, 0}), _second({0, 0}), _third({0, 0}), _fourth({0, 0}) {
-    std::cout << "Default constructor" << std::endl;
-}
 
 Square::Square(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) {
-    std::cout << "Init_list constructor" << std::endl;
+    // std::cout << "Init_list constructor" << std::endl;
 
     if (!is_square(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a square");
@@ -48,52 +42,13 @@ Square::Square(Point2D const & first, Point2D const & second, Point2D const & th
     _fourth = fourth;
 }
 
-Square::Square(Square const & sq) : _first(sq._first), _second(sq._second), _third(sq._third), _fourth(sq._fourth) {
-    std::cout << "Copy constructor" << std::endl;
-}
-
-Square::Square(Square&& sq) : _first(sq._first), _second(sq._second), _third(sq._third), _fourth(sq._fourth) {
-    std::cout << "Move constructor" << std::endl;
-    sq._first = {0, 0};
-    sq._second = {0, 0};
-    sq._third = {0, 0};
-    sq._fourth = {0, 0};
-}
-
-Square& Square::operator=(Square const & sq) noexcept {
-    std::cout << "Copy assignment operator" << std::endl;
-    if (this == &sq) {
-        return *this;
-    }
-    _first = sq._first;
-    _second = sq._second;
-    _third = sq._third;
-    _fourth = sq._fourth;
-    return *this;
-}
-
-Square& Square::operator=(Square&& sq) noexcept {
-    std::cout << "Move assignment operator" << std::endl;
-    if (this == &sq) {
-        return *this;
-    }
-    sq._first = {0, 0};
-    sq._second = {0, 0};
-    sq._third = {0, 0};
-    sq._fourth = {0, 0};
-    return *this;
-}
-
-Square::~Square() noexcept {
-    std::cout << "Destructor" << std::endl;
-}
-
 Square::Point2D Square::center() const noexcept {
     Point2D center;
     center.x = (_first.x + _second.x + _third.x + _fourth.x) / 4;
     center.y = (_first.y + _second.y + _third.y + _fourth.y) / 4;
     return center;
 }
+
 double Square::area() const noexcept {
     double len_1 = get_len(_first, _second);
     double len_2 = get_len(_first, _third);
@@ -109,10 +64,11 @@ Square::operator double() const noexcept {
 }
 
 bool Square::operator==(Square const & sq) {
-    return abs(area() - sq.area()) < get_machine_epsilon();
+    return (_first.x == sq._first.x && _first.y == sq._first.x && 
+            _second.x == sq._second.x && _second.y == sq._second.y && 
+            _third.x == sq._third.x && _third.y == sq._third.y && 
+            _fourth.x == sq._fourth.x && _fourth.y == sq._fourth.y);
 }
-
-
 
 std::istream& operator>>(std::istream& is, Square& sq) {
     Square::Point2D first, second, third, fourth;

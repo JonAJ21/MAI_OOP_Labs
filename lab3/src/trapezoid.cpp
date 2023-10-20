@@ -11,12 +11,8 @@ bool Trapezoid::is_trapezoid(Point2D const & first, Point2D const & second, Poin
     return are_sides_parallel(second, third, fourth, first);
 }
 
-Trapezoid::Trapezoid() : _first({0, 0}), _second({0, 0}), _third({0, 0}), _fourth({0, 0}) {
-    std::cout << "Default constructor" << std::endl;
-}
-
 Trapezoid::Trapezoid(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) {
-    std::cout << "Init_list constructor" << std::endl;
+    // std::cout << "Init_list constructor" << std::endl;
 
     if (!is_trapezoid(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a trapezoid");
@@ -26,51 +22,6 @@ Trapezoid::Trapezoid(Point2D const & first, Point2D const & second, Point2D cons
     _second = second;
     _third = third;
     _fourth = fourth;
-}
-
-Trapezoid::Trapezoid(Trapezoid const & tr) : _first(tr._first), _second(tr._second), _third(tr._third), _fourth(tr._fourth) {
-    std::cout << "Copy constructor" << std::endl;
-}
-
-Trapezoid::Trapezoid(Trapezoid&& tr) : _first(tr._first), _second(tr._second), _third(tr._third), _fourth(tr._fourth) {
-    std::cout << "Move constructor" << std::endl;
-    tr._first = {0, 0};
-    tr._second = {0, 0};
-    tr._third = {0, 0};
-    tr._fourth = {0, 0};
-}
-
-Trapezoid& Trapezoid::operator=(Trapezoid const & tr) noexcept {
-    std::cout << "Copy assignment operator" << std::endl;
-    if (this == &tr) {
-        return *this;
-    }
-    _first = tr._first;
-    _second = tr._second;
-    _third = tr._third;
-    _fourth = tr._fourth;
-    return *this;
-}
-
-Trapezoid& Trapezoid::operator=(Trapezoid&& tr) noexcept {
-    std::cout << "Move assignment operator" << std::endl;
-    if (this == &tr) {
-        return *this;
-    }
-    _first = tr._first;
-    _second = tr._second;
-    _third = tr._third;
-    _fourth = tr._fourth;
-
-    tr._first = {0, 0};
-    tr._second = {0, 0};
-    tr._third = {0, 0};
-    tr._fourth = {0, 0};
-    return *this;
-}
-
-Trapezoid::~Trapezoid() noexcept {
-    std::cout << "Destructor" << std::endl;
 }
 
 Trapezoid::Point2D Trapezoid::center() const noexcept{
@@ -102,8 +53,10 @@ Trapezoid::operator double() const noexcept {
 };
 
 bool Trapezoid::operator==(Trapezoid const & tr) {
-    //TODO
-    return true;
+    return (_first.x == tr._first.x && _first.y == tr._first.x && 
+            _second.x == tr._second.x && _second.y == tr._second.y && 
+            _third.x == tr._third.x && _third.y == tr._third.y && 
+            _fourth.x == tr._fourth.x && _fourth.y == tr._fourth.y);
 }
 
 std::istream& operator>>(std::istream& is, Trapezoid& tr) {

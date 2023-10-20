@@ -13,14 +13,8 @@ private:
     bool is_rectangle(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) const;
 
 public:
-    explicit Rectangle();
     explicit Rectangle(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth);
-    explicit Rectangle(Rectangle const & rec);
-    explicit Rectangle(Rectangle&& rec);
-    Rectangle& operator=(Rectangle const & rec) noexcept;
-    Rectangle& operator=(Rectangle&& rec) noexcept;
-    ~Rectangle() noexcept;
-
+    
     Point2D center() const noexcept override;
     double area() const noexcept override;
     explicit operator double() const noexcept override;

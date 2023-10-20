@@ -1,11 +1,7 @@
 #include "figure.h"
 
-double Figure::get_machine_epsilon() const {
-    double epsilon = 1.0;
-    while (1.0 + epsilon > 1.0) {
-        epsilon = epsilon / 2.0;
-    }
-    return epsilon;
+bool Figure::are_equal(double lhs, double rhs, double epsilon) const {
+    return abs(lhs - rhs) < epsilon;
 }
 
 bool Figure::are_sides_parallel(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) const {
@@ -15,7 +11,7 @@ bool Figure::are_sides_parallel(Point2D const & first, Point2D const & second, P
     double derivative_1 = (second.y - first.y) / (second.x - first.x);
     double derivative_2 = (fourth.y - third.y) / (fourth.x - third.x);
 
-    return (abs(derivative_1 - derivative_2) < get_machine_epsilon());
+    return are_equal(derivative_1, derivative_2, 1e-6);
 }
 
 double Figure::get_len(Point2D const & first, Point2D const & second) const {
