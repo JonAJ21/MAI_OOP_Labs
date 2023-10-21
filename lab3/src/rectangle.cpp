@@ -67,7 +67,7 @@ Rectangle::operator double() const noexcept {
 }
 
 bool Rectangle::operator==(Rectangle const & rec) {
-    return (_first.x == rec._first.x && _first.y == rec._first.x && 
+    return (_first.x == rec._first.x && _first.y == rec._first.y && 
             _second.x == rec._second.x && _second.y == rec._second.y && 
             _third.x == rec._third.x && _third.y == rec._third.y && 
             _fourth.x == rec._fourth.x && _fourth.y == rec._fourth.y);

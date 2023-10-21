@@ -53,7 +53,7 @@ Trapezoid::operator double() const noexcept {
 };
 
 bool Trapezoid::operator==(Trapezoid const & tr) {
-    return (_first.x == tr._first.x && _first.y == tr._first.x && 
+    return (_first.x == tr._first.x && _first.y == tr._first.y && 
             _second.x == tr._second.x && _second.y == tr._second.y && 
             _third.x == tr._third.x && _third.y == tr._third.y && 
             _fourth.x == tr._fourth.x && _fourth.y == tr._fourth.y);

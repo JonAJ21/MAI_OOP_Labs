@@ -5,7 +5,7 @@
 #include "trapezoid.h"
 
 int main() {
-    Figure** figures = nullptr;
+    Figure** figures;
     size_t sz = 0;
     double total_area = 0;
     while(std::cin) {
@@ -24,12 +24,22 @@ int main() {
         case 1:
             // Add figure
             if (sz == 0) {
-                figures = (Figure**) malloc(sizeof(Figure*));
-                figures[sz] = nullptr;
+                try {
+                    figures = (Figure**) malloc(sizeof(Figure*));
+                } catch (std::bad_alloc const & exception){
+                    throw exception;
+                }
+
+                // figures[sz] = nullptr;
                 ++sz;
             } else {
-                figures = (Figure**) realloc(figures, ++sz * sizeof(Figure*));
-                figures[sz - 1] = nullptr;
+                try {
+                    figures = (Figure**) realloc(figures, ++sz * sizeof(Figure*));
+                } catch (std::bad_alloc const & exception) {
+                    throw exception;
+                }
+
+                // figures[sz - 1] = nullptr;
             }
             std::cout << "What figure do you want to add?" << std::endl;
             std::cout << "1. Square" << std::endl; 
@@ -40,17 +50,29 @@ int main() {
             {
             case 1:
                 std::cout << "Enter coordinates" << std::endl;
-                figures[sz - 1] = new Square();
+                try {
+                    figures[sz - 1] = new Square();
+                } catch (std::bad_alloc const & exception) {
+                    throw exception;
+                }
                 std::cin >> *figures[sz - 1];
                 break;
             case 2:
                 std::cout << "Enter coordinates" << std::endl;
-                figures[sz - 1] = new Rectangle();
+                try {
+                    figures[sz - 1] = new Rectangle();
+                } catch (std::bad_alloc const & exception) {
+                    throw exception;
+                }
                 std::cin >> *figures[sz - 1];
                 break;
             case 3:
                 std::cout << "Enter coordinates" << std::endl;
-                figures[sz - 1] = new Trapezoid();
+                try {
+                    figures[sz - 1] = new Trapezoid();
+                } catch (std::bad_alloc const & exception) {
+                    throw exception;
+                }
                 std::cin >> *figures[sz - 1];
                 break;
             default:
@@ -64,11 +86,15 @@ int main() {
             size_t idx;
             std::cin >> idx;
             delete figures[idx];
-            figures[idx] = nullptr;
+            // figures[idx] = nullptr;
             for (size_t i = idx; i < sz - 1; ++i) {
                 figures[i] = figures[i + 1];
             }
-            figures = (Figure**) realloc(figures, --sz * sizeof(Figure*));
+            try {
+                figures = (Figure**) realloc(figures, --sz * sizeof(Figure*));
+            } catch (std::bad_alloc const & exception) {
+                throw exception;
+            }
             break;
         case 3:
             // Print figures
