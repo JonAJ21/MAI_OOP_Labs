@@ -22,9 +22,10 @@ protected:
 
     virtual void input(std::istream& is) = 0;
     virtual void print(std::ostream& os) const = 0;
+
 public:
     friend std::istream& operator>>(std::istream& is, Figure & fig);
-    friend std::ostream& operator<<(std::ostream& os, Figure const & fig); 
+    friend std::ostream& operator<<(std::ostream& os, Figure const & fig);
 
 };
 

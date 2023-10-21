@@ -63,7 +63,7 @@ Square::operator double() const noexcept {
     return area();
 }
 
-bool Square::operator==(Square const & sq) {
+bool Square::operator==(Square const & sq) const {
     return (_first.x == sq._first.x && _first.y == sq._first.x && 
             _second.x == sq._second.x && _second.y == sq._second.y && 
             _third.x == sq._third.x && _third.y == sq._third.y && 
