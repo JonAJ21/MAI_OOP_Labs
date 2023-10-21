@@ -59,7 +59,7 @@ bool Trapezoid::operator==(Trapezoid const & tr) {
             _fourth.x == tr._fourth.x && _fourth.y == tr._fourth.y);
 }
 
-std::istream& operator>>(std::istream& is, Trapezoid& tr) {
+void Trapezoid::input(std::istream& is) {
     Trapezoid::Point2D first, second, third, fourth;
 
     is >> first.x >> first.y;
@@ -67,20 +67,29 @@ std::istream& operator>>(std::istream& is, Trapezoid& tr) {
     is >> third.x >> third.y;
     is >> fourth.x >> fourth.y;
 
-    if (!tr.is_trapezoid(first, second, third, fourth)) {
+    if (!is_trapezoid(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a trapezoid");
     }
-    tr._first = first;
-    tr._second = second;
-    tr._third = third;
-    tr._fourth = fourth;
+
+    _first = first;
+    _second = second;
+    _third = third;
+    _fourth = fourth;
+}
+
+void Trapezoid::print(std::ostream& os) const {
+    os << '{' << _first.x << ", " << _first.y << "} ";
+    os << '{' << _second.x << ", " << _second.y << "} ";
+    os << '{' << _third.x << ", " << _third.y << "} ";
+    os << '{' << _fourth.x << ", " << _fourth.y << "} ";
+}
+
+std::istream& operator>>(std::istream& is, Trapezoid& tr) {
+    tr.input(is);
     return is;
 }
 
 std::ostream& operator<<(std::ostream& os, Trapezoid const & tr) {
-    os << '{' << tr._first.x << ", " << tr._first.y << "} ";
-    os << '{' << tr._second.x << ", " << tr._second.y << "} ";
-    os << '{' << tr._third.x << ", " << tr._third.y << "} ";
-    os << '{' << tr._fourth.x << ", " << tr._fourth.y << "} ";
+    tr.print(os);
     return os;
 }

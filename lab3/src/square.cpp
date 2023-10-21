@@ -70,7 +70,7 @@ bool Square::operator==(Square const & sq) {
             _fourth.x == sq._fourth.x && _fourth.y == sq._fourth.y);
 }
 
-std::istream& operator>>(std::istream& is, Square& sq) {
+void Square::input(std::istream& is) {
     Square::Point2D first, second, third, fourth;
 
     is >> first.x >> first.y;
@@ -78,20 +78,31 @@ std::istream& operator>>(std::istream& is, Square& sq) {
     is >> third.x >> third.y;
     is >> fourth.x >> fourth.y;
 
-    if (!sq.is_square(first, second, third, fourth)) {
+    if (!is_square(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a square");
     }
-    sq._first = first;
-    sq._second = second;
-    sq._third = third;
-    sq._fourth = fourth;
+
+    _first = first;
+    _second = second;
+    _third = third;
+    _fourth = fourth;
+}
+
+void Square::print(std::ostream& os) const {
+    os << '{' << _first.x << ", " << _first.y << "} ";
+    os << '{' << _second.x << ", " << _second.y << "} ";
+    os << '{' << _third.x << ", " << _third.y << "} ";
+    os << '{' << _fourth.x << ", " << _fourth.y << "} ";
+}
+
+
+
+std::istream& operator>>(std::istream& is, Square& sq) {
+    sq.input(is);
     return is;
 }
 
 std::ostream& operator<<(std::ostream& os, Square const & sq) {
-    os << '{' << sq._first.x << ", " << sq._first.y << "} ";
-    os << '{' << sq._second.x << ", " << sq._second.y << "} ";
-    os << '{' << sq._third.x << ", " << sq._third.y << "} ";
-    os << '{' << sq._fourth.x << ", " << sq._fourth.y << "} ";
+    sq.print(os);
     return os;
 }

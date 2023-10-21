@@ -1,5 +1,15 @@
 #include "figure.h"
 
+std::istream& operator>>(std::istream& is, Figure & fig) {
+    fig.input(is);
+    return is;
+}
+std::ostream& operator<<(std::ostream& os, Figure const & fig) {
+    fig.print(os);
+    return os;
+} 
+
+
 bool Figure::are_equal(double lhs, double rhs, double epsilon) const {
     return abs(lhs - rhs) < epsilon;
 }

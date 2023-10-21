@@ -13,6 +13,7 @@ private:
     bool is_square(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth) const;
 
 public:
+    explicit Square() = default;
     explicit Square(Point2D const & first, Point2D const & second, Point2D const & third, Point2D const & fourth);
 
     Point2D center() const noexcept override;
@@ -20,10 +21,11 @@ public:
     explicit operator double() const noexcept override;
     bool operator==(Square const & sq);
 
+    void input(std::istream& is) override;
+    void print(std::ostream& os) const override;
+
     friend std::istream& operator>>(std::istream& is, Square & sq);
     friend std::ostream& operator<<(std::ostream& os, Square const & sq); 
 };
-
-
 
 #endif // SQUARE_H

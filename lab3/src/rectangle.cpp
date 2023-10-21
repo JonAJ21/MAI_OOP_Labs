@@ -73,26 +73,34 @@ bool Rectangle::operator==(Rectangle const & rec) {
             _fourth.x == rec._fourth.x && _fourth.y == rec._fourth.y);
 }
 
-std::istream& operator>>(std::istream& is, Rectangle& rec) {
+void Rectangle::input(std::istream& is) {
     Rectangle::Point2D first, second, third, fourth;
     is >> first.x >> first.y;
     is >> second.x >> second.y;
     is >> third.x >> third.y;
     is >> fourth.x >> fourth.y;
-    if (!rec.is_rectangle(first, second, third, fourth)) {
+    if (!is_rectangle(first, second, third, fourth)) {
         throw std::invalid_argument("It is not a rectangle");
     }
-    rec._first = first;
-    rec._second = second;
-    rec._third = third;
-    rec._fourth = fourth;
+    _first = first;
+    _second = second;
+    _third = third;
+    _fourth = fourth;
+}
+
+void Rectangle::print(std::ostream& os) const {
+    os << '{' << _first.x << ", " << _first.y << "} ";
+    os << '{' << _second.x << ", " << _second.y << "} ";
+    os << '{' << _third.x << ", " << _third.y << "} ";
+    os << '{' << _fourth.x << ", " << _fourth.y << "} ";
+}
+
+std::istream& operator>>(std::istream& is, Rectangle& rec) {
+    rec.input(is);
     return is;
 }
 
 std::ostream& operator<<(std::ostream& os, Rectangle const & rec) {
-    os << '{' << rec._first.x << ", " << rec._first.y << "} ";
-    os << '{' << rec._second.x << ", " << rec._second.y << "} ";
-    os << '{' << rec._third.x << ", " << rec._third.y << "} ";
-    os << '{' << rec._fourth.x << ", " << rec._fourth.y << "} ";
+    rec.print(os);
     return os;
 }
