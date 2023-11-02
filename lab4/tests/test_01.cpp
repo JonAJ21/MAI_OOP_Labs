@@ -69,7 +69,6 @@ TEST(rectangle, All) {
     
     double rec_center_x = rec.center().x;
     double rec_center_y = rec.center().y;
-
     ASSERT_TRUE(are_equal(rec_center_x, 1.5, 1e-6));
     ASSERT_TRUE(are_equal(rec_center_y, 1.5, 1e-6));
     
@@ -94,6 +93,35 @@ TEST(rectangle, All) {
     ASSERT_TRUE(throwed);
 }
 
+TEST(trapezoid, All) {
+    Trapezoid<double> tr {{1,0}, {2, 2}, {5, 2}, {6, 0}};
+
+    double tr_center_x = tr.center().x;
+    double tr_center_y = tr.center().y;
+    ASSERT_TRUE(are_equal(tr_center_x, 3.5, 1e-6));
+    ASSERT_TRUE(are_equal(tr_center_y, 1.0, 1e-6));
+
+    double tr_area_func = tr.area();
+    double tr_area_double = static_cast<double>(tr);
+    ASSERT_TRUE(are_equal(tr_area_func, 8.0, 1e-6));
+    ASSERT_TRUE(are_equal(tr_area_double, 8.0, 1e-6));
+
+    Trapezoid<double> tr_1 = tr;
+    Trapezoid<double> tr_2;
+    tr_2 = tr;
+    ASSERT_TRUE(tr_1 == tr_2);
+    Trapezoid<double> tr_3 {{1,0}, {2, 3}, {5, 3}, {6, 0}};
+    ASSERT_TRUE(!(tr_2 == tr_3));
+
+    bool throwed = 0;
+    try {
+        Trapezoid<int> tr_4 {{1, 1}, {0, 1}, {1, 1}, {1, 0}};
+    } catch (const std::invalid_argument& exception) {
+        throwed = 1;
+    }
+    ASSERT_TRUE(throwed);
+
+}
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
