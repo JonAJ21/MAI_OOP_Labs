@@ -13,11 +13,9 @@ public:
     virtual double area() const noexcept = 0;
     explicit virtual operator double() const noexcept = 0;
 
-protected:
     virtual void input(std::istream& is) = 0;
     virtual void print(std::ostream& os) const = 0;
 
-public:
     template<T> friend std::istream& operator>>(std::istream& is, Figure<T> & fig);
     template<T> friend std::ostream& operator<<(std::ostream& os, Figure<T> const & fig);
 
@@ -34,7 +32,5 @@ std::ostream& operator<<(std::ostream& os, Figure<T> const & fig) {
     fig.print(os);
     return os;
 }
-
-
 
 #endif // FIGURE_H
