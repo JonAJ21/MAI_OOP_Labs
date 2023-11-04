@@ -7,6 +7,7 @@
 template<typename T>
 class Figure {
 public:
+    static_assert(std::is_arithmetic<T>::value, "T must be arithmetic");
     virtual ~Figure() noexcept = default;
 
     virtual Point2D<T> center() const noexcept = 0;

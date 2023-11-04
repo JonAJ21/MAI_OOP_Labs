@@ -14,6 +14,7 @@
 template<typename T, typename U>
 class Array final {
 private:
+    static_assert(std::is_arithmetic<U>::value, "U must be arithmetic");
     size_t _capacity;
     size_t _sz;
     std::shared_ptr<std::shared_ptr<T>[]> _figures;

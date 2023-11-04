@@ -6,7 +6,6 @@
 template<typename T>
 class Rectangle final : public Figure<T> {
 private:
-    private:
     Point2D<T> _first;
     Point2D<T> _second;
     Point2D<T> _third;

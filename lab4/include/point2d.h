@@ -2,9 +2,11 @@
 #define POINT2D_H
 
 #include <cmath>
+#include <type_traits>
 
 template<typename T>
 struct Point2D {
+    static_assert(std::is_arithmetic<T>::value, "T must be arithmetic");
     T x;
     T y;
 };
