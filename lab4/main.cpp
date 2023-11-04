@@ -7,12 +7,12 @@
 #include "rectangle.h"
 #include "trapezoid.h"
 
-#include <typeinfo>
+
+
 
 int main() {
-    
     // Create and remove figures
-    Array<Figure<double>> fig_array;
+    Array<Figure<double>, double> fig_array;
     
     std::cout << "=================================================================" << std::endl;
     std::cout << std::boolalpha << "fig_array is empty: " <<  fig_array.is_empty() << std::endl;
@@ -61,7 +61,8 @@ int main() {
         std::cout << fig_array[i].get() << ' ' << *fig_array[i] << ' ' << fig_array[i]->center().x
         << ' ' << fig_array[i]->center().y << ' ' << static_cast<double>(*fig_array[i]) << std::endl;
     }
-
+    
+    std::cout << "=================================================================" << std::endl;
 
     return 0;
 }  

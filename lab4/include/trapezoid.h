@@ -32,8 +32,9 @@ public:
 template<typename T>
 bool Trapezoid<T>::is_trapezoid(Point2D<T> const & first, Point2D<T> const & second, Point2D<T> const & third, Point2D<T> const & fourth) const {
    // Points must be in traversal order
-    if (first.x == second.x && second.x == third.x) return false;
-    if (first.y == second.y && second.y == third.y) return false;
+    if (are_equal(first.x, second.x, 1e-6) && are_equal(second.x, third.x, 1e-6)) return false;
+    if (are_equal(first.y, second.y, 1e-6) && are_equal(second.y, third.y, 1e-6)) return false;
+
     if (are_sides_parallel(first, second, third, fourth)) {
         return !(are_sides_parallel(second, third, fourth, first));
     }

@@ -4,6 +4,7 @@
 #include "square.h"
 #include "rectangle.h"
 #include "trapezoid.h"
+#include "array.h"
 
 TEST(point2d, All) {
     Point2D<int> p_1 {1, 2};
@@ -120,6 +121,53 @@ TEST(trapezoid, All) {
         throwed = 1;
     }
     ASSERT_TRUE(throwed);
+}
+
+TEST(array, All) {
+
+    Array<Figure<double>, double> array_1;
+    ASSERT_TRUE(array_1.is_empty());
+    std::shared_ptr<Figure<double>> fig_1;
+    std::shared_ptr<Figure<double>> fig_2;
+    std::shared_ptr<Figure<double>> fig_3;
+    try {
+        fig_1 = std::make_shared<Square<double>>(Square<double>({0,0}, {0, 1}, {1, 1}, {1, 0}));
+        fig_2 = std::make_shared<Rectangle<double>>(Rectangle<double>({0,0}, {0, 2}, {4, 2}, {4, 0}));
+        fig_3 = std::make_shared<Trapezoid<double>>(Trapezoid<double>({0,0}, {4, 0}, {0, 3}, {6, 3}));
+        Array<Figure<double>, double> array_2 {fig_1, fig_2, fig_3};
+        ASSERT_TRUE(!array_2.is_empty());
+        array_1 = array_2;
+    } catch (std::bad_alloc const & exception) {
+        throw exception;
+    }
+    ASSERT_TRUE(!array_1.is_empty());
+
+    try {
+        Array<Figure<double>, double> array_2 {array_1};
+        ASSERT_TRUE(array_2.size() == 3);
+        for (size_t i = 0; i < array_2.size(); ++i) {
+        ASSERT_TRUE(!(array_1[i] == array_2[i]));
+    }
+    } catch (std::bad_alloc const & exception) {
+        throw exception;
+    }
+    std::shared_ptr<Figure<double>> fig_4;
+    try {
+        fig_4 = std::make_shared<Square<double>>(Square<double>({0,0}, {0, 2}, {2, 2}, {2, 0}));
+        array_1.push_back(fig_4);
+    } catch (std::bad_alloc const & exception) {
+        throw exception;
+    }
+    ASSERT_TRUE(array_1[3] == fig_4);
+
+    try {
+        array_1.insert(fig_2, 2);
+    } catch (std::bad_alloc const & exception) {
+        throw exception;
+    }
+    ASSERT_TRUE(array_1[2] == fig_2);
+    array_1.remove(3);
+    ASSERT_TRUE(array_1.size() == 4);
 
 }
 

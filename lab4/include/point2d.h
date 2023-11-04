@@ -16,8 +16,8 @@ bool are_equal(T lhs, T rhs, double epsilon) {
 
 template<typename T>
 bool are_sides_parallel(Point2D<T> const & first, Point2D<T> const & second, Point2D<T> const & third, Point2D<T> const & fourth) {
-    if (second.x - first.x == 0) return (fourth.x - third.x == 0);
-    if (second.y - first.y == 0) return (fourth.y - third.y == 0);
+    if (are_equal(first.x, second.x, 1e-6)) return are_equal(third.x, fourth.x, 1e-6);
+    if (are_equal(first.y, second.y, 1e-6)) return are_equal(third.y, fourth.y, 1e-6);
     
     double derivative_1 = (second.y - first.y) / (second.x - first.x);
     double derivative_2 = (fourth.y - third.y) / (fourth.x - third.x);
