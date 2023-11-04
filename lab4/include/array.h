@@ -37,8 +37,8 @@ public:
 };
 
 template<typename T>
-Array<T>::Array() : _sz(0), _capacity(1), _figures(nullptr) {
-    _figures = std::make_shared< std::shared_ptr<T>[] >(_capacity);
+Array<T>::Array() : _sz(0), _capacity(0), _figures(nullptr) {
+    // _figures = std::make_shared< std::shared_ptr<T>[] >(_capacity);
 }
 
 template<typename T>
@@ -130,6 +130,11 @@ std::shared_ptr<T>& Array<T>::operator[](size_t idx) {
 
 template<typename T>
 Array<T>& Array<T>::push_back(std::shared_ptr<T> const & figure_ptr) {
+    
+    if (_sz == 0 && _capacity == 0) {
+        _figures = std::make_shared< std::shared_ptr<T>[] >(++_capacity);
+    }
+    
     if (_sz == _capacity) {
         _capacity *= 2;
         std::shared_ptr<std::shared_ptr<T>[]> temp;
@@ -148,6 +153,11 @@ Array<T>& Array<T>::insert(std::shared_ptr<T> const & figure_ptr, size_t idx) {
     if (!(0 <= idx && idx <= _sz)) {
         throw std::invalid_argument("Index out of range");
     }
+
+    if (_sz == 0 && _capacity == 0) {
+        _figures = std::make_shared< std::shared_ptr<T>[] >(++_capacity);
+    }
+
     if (_sz == _capacity) {
         _capacity *= 2;
         std::shared_ptr<std::shared_ptr<T>[]> temp;
