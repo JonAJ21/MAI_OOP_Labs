@@ -73,7 +73,8 @@ namespace mai {
     }
 
     template<typename T, typename Allocator>
-    Queue<T, Allocator>::Queue(Queue<T, Allocator>&& other) : _size(other._size) , _capacity(other._capacity), _data(other._data), _head_idx(other._head_idx) {
+    Queue<T, Allocator>::Queue(Queue<T, Allocator>&& other) : _allocator(other._allocator), _size(other._size) , _capacity(other._capacity), _data(other._data), _head_idx(other._head_idx) {
+        other._allocator = Allocator();
         other._size = 0;
         other._capacity = 0;
         other._data = nullptr;
@@ -96,12 +97,14 @@ namespace mai {
     template<typename T, typename Allocator>
     Queue<T, Allocator>& Queue<T, Allocator>::operator=(Queue<T, Allocator>&& other) {
         if (this == &other) return *this;
-        // _allocator = other._allocator;
+        
+        _allocator = other._allocator;
         _size = other._size;
         _capacity = other._capacity;
         _data = other._data;
         _head_idx = other._head_idx;
         
+        other._allocator = Allocator();
         other._size = 0;
         other._capacity = 0;
         other._data = nullptr;
