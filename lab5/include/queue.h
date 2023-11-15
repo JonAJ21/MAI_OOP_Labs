@@ -6,7 +6,7 @@
 namespace mai {
 
     template<typename T, typename Allocator = std::allocator<T>>
-    class Queue {
+    class Queue final {
     private:
         Allocator _allocator;
         size_t _size;
@@ -35,9 +35,8 @@ namespace mai {
         size_t size();
         size_t capacity();
 
-        
         void print(std::ostream& os) const;
-        template<T, Allocator> friend std::ostream& operator<<(std::ostream& os, Queue<T, Allocator> const & queue);
+        // template<T, Allocator> friend std::ostream& operator<<(std::ostream& os, Queue<T, Allocator> const & queue);
     };
 
     template<typename T, typename Allocator>
@@ -122,11 +121,11 @@ namespace mai {
         T* data = _allocator.allocate(capacity);
         if (capacity > _size ) {
             for (size_t i = 0; i < _size; ++i) {
-                data[(_head_idx + i) % _capacity] = _data[i];
+                data[(_head_idx + i) % capacity] = _data[i];
             }
         } else {
             for (size_t i = 0; i < capacity; ++i) {
-                data[(_head_idx + i) % _capacity] = _data[i];
+                data[(_head_idx + i) % capacity] = _data[i];
             }
             _size = capacity;
         }
@@ -194,11 +193,11 @@ namespace mai {
         }
     }
 
-    template<typename T, typename Allocator>
-    std::ostream& operator<<(std::ostream& os, mai::Queue<T, Allocator> const & queue) {
-        queue.print(os);
-        return os;
-    }
+    // template<typename T, typename Allocator>
+    // std::ostream& operator<<(std::ostream& os, mai::Queue<T, Allocator> const & queue) {
+    //     queue.print(os);
+    //     return os;
+    // }
 
 }
 #endif // QUEUE_H
