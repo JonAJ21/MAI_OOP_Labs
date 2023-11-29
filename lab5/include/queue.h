@@ -5,50 +5,48 @@
 
 namespace mai {
 
-    template<typename T, typename Allocator = std::allocator<T>>
+    template<typename T, template <typename> typename Allocator = std::allocator>
     class Queue final {
     private:
-        Allocator _allocator;
+        Allocator<T> _allocator;
         size_t _size;
         size_t _capacity;
         T* _data;
         size_t _head_idx;
     public:
-        Queue();
+        Queue() noexcept;
         Queue(size_t size);
         Queue(std::initializer_list<T> const & init_list);
-        // Queue(Allocator const & allocator);
         Queue(Queue<T, Allocator> const & other);
-        Queue(Queue<T, Allocator>&& other);
+        Queue(Queue<T, Allocator>&& other) noexcept;
         Queue<T, Allocator>& operator=(Queue<T, Allocator> const & other);
-        Queue<T, Allocator>& operator=(Queue<T, Allocator>&& other);
+        Queue<T, Allocator>& operator=(Queue<T, Allocator>&& other) noexcept;
         ~Queue();
 
         void reserve(size_t capacity);
-        void clear();
+        void clear() noexcept;
 
-        T& front();
+        T& front() const;
         void pop();
         void push(T const & value);
 
-        bool empty();
-        size_t size();
-        size_t capacity();
+        bool empty() const noexcept;
+        size_t size() const noexcept;
+        size_t capacity() const noexcept;
 
-        void print(std::ostream& os) const;
-        // template<T, Allocator> friend std::ostream& operator<<(std::ostream& os, Queue<T, Allocator> const & queue);
+        void print(std::ostream& os) const noexcept;
     };
 
-    template<typename T, typename Allocator>
-    Queue<T, Allocator>::Queue() : _size(0), _capacity(0), _data(nullptr), _head_idx(0) {
+    template<typename T, template <typename> typename Allocator>
+    Queue<T, Allocator>::Queue() noexcept : _size(0), _capacity(0), _data(nullptr), _head_idx(0) {
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     Queue<T, Allocator>::Queue(size_t size) : _size(size), _capacity(size), _head_idx(0) {
         _data = _allocator.allocate(_capacity);
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     Queue<T, Allocator>::Queue(std::initializer_list<T> const & init_list) : _size(init_list.size()), _capacity(init_list.size()), _head_idx(0) {
         _data = _allocator.allocate(_capacity);
         size_t i = 0;
@@ -57,13 +55,7 @@ namespace mai {
         }
     }
 
-
-    // template<typename T, typename Allocator>
-    // Queue<T, Allocator>::Queue(Allocator const & allocator) : _allocator(allocator), _size(0), _capacity(0), _data(nullptr) {
-    //     // TODO
-    // }
-
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     Queue<T, Allocator>::Queue(Queue<T, Allocator> const & other) : _size(other._size), _capacity(other._capacity), _head_idx(other._head_idx) {
         _data = _allocator.allocate(_capacity);
         for (size_t i = 0; i < _size; ++i) {
@@ -71,8 +63,8 @@ namespace mai {
         }
     }
 
-    template<typename T, typename Allocator>
-    Queue<T, Allocator>::Queue(Queue<T, Allocator>&& other) : _allocator(other._allocator), _size(other._size) , _capacity(other._capacity), _data(other._data), _head_idx(other._head_idx) {
+    template<typename T, template <typename> typename Allocator>
+    Queue<T, Allocator>::Queue(Queue<T, Allocator>&& other) noexcept : _allocator(other._allocator), _size(other._size) , _capacity(other._capacity), _data(other._data), _head_idx(other._head_idx) {
         other._allocator = Allocator();
         other._size = 0;
         other._capacity = 0;
@@ -80,7 +72,7 @@ namespace mai {
         other._head_idx = 0;
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     Queue<T, Allocator>& Queue<T, Allocator>::operator=(Queue<T, Allocator> const & other) {
         if (this == &other) return *this;
         _size = other._size;
@@ -93,8 +85,8 @@ namespace mai {
         return *this;
     }
 
-    template<typename T, typename Allocator>
-    Queue<T, Allocator>& Queue<T, Allocator>::operator=(Queue<T, Allocator>&& other) {
+    template<typename T, template <typename> typename Allocator>
+    Queue<T, Allocator>& Queue<T, Allocator>::operator=(Queue<T, Allocator>&& other) noexcept {
         if (this == &other) return *this;
         
         _allocator = other._allocator;
@@ -111,12 +103,12 @@ namespace mai {
         return *this;
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     Queue<T, Allocator>::~Queue() {
         _allocator.deallocate(_data, _capacity);
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     void Queue<T, Allocator>::reserve(size_t capacity) {
         T* data = _allocator.allocate(capacity);
         if (capacity > _size ) {
@@ -135,8 +127,8 @@ namespace mai {
         _capacity = capacity;
     }
 
-    template<typename T, typename Allocator>
-    void Queue<T, Allocator>::clear() {
+    template<typename T, template <typename> typename Allocator>
+    void Queue<T, Allocator>::clear() noexcept {
         for (size_t i = 0; i < _size; ++i) {
             _data[(_head_idx + i) % _capacity] = T();
         }
@@ -144,18 +136,18 @@ namespace mai {
         _head_idx = 0;
     }
 
-    template<typename T, typename Allocator>
-    T& Queue<T, Allocator>::front() {
+    template<typename T, template <typename> typename Allocator>
+    T& Queue<T, Allocator>::front() const {
         if (_size == 0) {
-            return T(); // Вероятно, здесь нужно кидать ошибку, но какую?
+            throw std::logic_error("Error (front()): queue is empty");
         }
         return _data[_head_idx];
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     void Queue<T, Allocator>::pop() {
-        if (_size == 0) { 
-            return; // Вероятно, здесь нужно кидать ошибку, но какую?
+        if (_size == 0) {
+            throw std::logic_error("Error (pop()): queue is empty");
         }
         T head_value = _data[_head_idx];
         _data[_head_idx] = T();
@@ -163,7 +155,7 @@ namespace mai {
         --_size; 
     }
 
-    template<typename T, typename Allocator>
+    template<typename T, template <typename> typename Allocator>
     void Queue<T, Allocator>::push(T const & value) {
         if (_capacity == _size) {
             this->reserve(_capacity * 2);
@@ -171,33 +163,27 @@ namespace mai {
         _data[(_head_idx + _size++) % _capacity] = value;
     }
 
-    template<typename T, typename Allocator>
-    bool Queue<T, Allocator>::empty() {
+    template<typename T, template <typename> typename Allocator>
+    bool Queue<T, Allocator>::empty() const noexcept{
         return (_size == 0);
     }
 
-    template<typename T, typename Allocator>
-    size_t Queue<T, Allocator>::size() {
+    template<typename T, template <typename> typename Allocator>
+    size_t Queue<T, Allocator>::size() const noexcept{
         return _size;
     }
 
-    template<typename T, typename Allocator>
-    size_t Queue<T, Allocator>::capacity() {
+    template<typename T, template <typename> typename Allocator>
+    size_t Queue<T, Allocator>::capacity() const noexcept {
         return _capacity;
     }
 
-    template<typename T, typename Allocator>
-    void Queue<T, Allocator>::print(std::ostream& os) const {
+    template<typename T, template <typename> typename Allocator>
+    void Queue<T, Allocator>::print(std::ostream& os) const noexcept{
         for (size_t i = 0; i < _size; ++i) {
             os << _data[(_head_idx + i) % _capacity] << ' ';
         }
     }
-
-    // template<typename T, typename Allocator>
-    // std::ostream& operator<<(std::ostream& os, mai::Queue<T, Allocator> const & queue) {
-    //     queue.print(os);
-    //     return os;
-    // }
 
 }
 #endif // QUEUE_H
