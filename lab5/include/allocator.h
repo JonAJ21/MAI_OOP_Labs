@@ -47,6 +47,7 @@ namespace mai {
     Allocator<T>& Allocator<T>::operator=(Allocator<T>&& other) {
         _used_blocks = std::move(other._used_blocks);
         _free_blocks = std::move(other._free_blocks);
+        return *this;
     }
 
     template<typename T>
@@ -75,6 +76,7 @@ namespace mai {
 
     template<typename T>
     void Allocator<T>::deallocate(T* ptr, size_t size) { // ОЧЕНЬ медленно работает
+        if (ptr == nullptr) return;
         for (size_t i = 0; i < _used_blocks.size(); ++i) {
             if (_used_blocks[i].first == size && _used_blocks[i].second == ptr) {
                 _free_blocks.push_back(_used_blocks[i]);

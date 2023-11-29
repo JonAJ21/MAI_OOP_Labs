@@ -1,12 +1,61 @@
 #include <iostream>
 #include <map>
 #include <chrono>
-#include "queue.h"
+#include "item_queue.h"
 #include "allocator.h"
 
 #include <deque>
 
 int main() {
+
+    mai::Queue<int, mai::Allocator> q2 {1, 10, 3, 4, 5}; 
+    
+    mai::Queue<int, mai::Allocator> q;
+    q = std::move(q2);
+    std::cout << "HERE" << std::endl;
+    std::cout << q.front() << std::endl;
+    std::cout << q.size() << std::endl;
+    q.pop();
+
+    std::cout << q.front() << std::endl;
+    std::cout << q.size() << std::endl;
+    q.pop();
+
+    std::cout << q.front() << std::endl;
+    std::cout << q.size() << std::endl;
+    q.pop();
+
+    std::cout << q.front() << std::endl;
+    std::cout << q.size() << std::endl;
+    q.pop();
+
+    std::cout << q.front() << std::endl;
+    std::cout << q.size() << std::endl;
+    q.pop();
+
+    std::cout << "====" << std::endl;
+
+
+
+
+
+    // mai::Queue<int, mai::Allocator> q;
+    // mai::Queue<int> q2;
+    // q.push(10);
+    // q.push(20);
+    // std::cout << q.size() << std::endl;
+    // std::cout << q.front() << std::endl;
+    // q.pop();
+    // std::cout << q.size() << std::endl;
+    // std::cout << q.front() << std::endl;
+    // std::cout << q.empty() << std::endl;
+    // q.pop();
+    // std::cout << q.empty() << std::endl;
+    // std::cout << q.size() << std::endl;
+
+    
+
+
 
     // std::deque<int> d {1, 2, 3, 4, 5};
     // for (auto el : d) {
@@ -67,38 +116,38 @@ int main() {
     //     std::cout << e.first << ' ' << e.second << '\n';
     // }
 
-    mai::Queue<int, mai::Allocator> q{10, 2, 3, 4, 5};
+    // mai::Queue<int, mai::Allocator> q{10, 2, 3, 4, 5};
     
-    mai::Queue<int, mai::Allocator> q2;
-    q2 = q;
+    // mai::Queue<int, mai::Allocator> q2;
+    // q2 = q;
 
-    // std::cout << q << std::endl;
-    q.print(std::cout);
-    std::cout << "capacity: " << q.capacity() << std::endl;
-    std::cout << "size: " << q.size() << std::endl;
-    std::cout << std::boolalpha << "empty: " << q.empty() << std::endl;
+    // // std::cout << q << std::endl;
+    // q.print(std::cout);
+    // std::cout << "capacity: " << q.capacity() << std::endl;
+    // std::cout << "size: " << q.size() << std::endl;
+    // std::cout << std::boolalpha << "empty: " << q.empty() << std::endl;
 
-    q.push(125);
-    q.push(125);
-    q.push(125);
-    q.push(125);
-    q.push(125);
-    q.pop();
-    q.pop();
-    q.pop();
-    q.pop();
-    q.pop();
-    q.pop();
-    q.push(125);
-    q.push(125);
-    q.push(125);
-    // std::cout << q << std::endl;
-    // q.reserve(3);
-    q.print(std::cout);
-    std::cout << "capacity: " << q.capacity() << std::endl;
-    std::cout << "size: " << q.size() << std::endl;
-    std::cout << std::boolalpha << "empty: " << q.empty() << std::endl;
-    q2.print(std::cout);
+    // q.push(125);
+    // q.push(125);
+    // q.push(125);
+    // q.push(125);
+    // q.push(125);
+    // q.pop();
+    // q.pop();
+    // q.pop();
+    // q.pop();
+    // q.pop();
+    // q.pop();
+    // q.push(125);
+    // q.push(125);
+    // q.push(125);
+    // // std::cout << q << std::endl;
+    // // q.reserve(3);
+    // q.print(std::cout);
+    // std::cout << "capacity: " << q.capacity() << std::endl;
+    // std::cout << "size: " << q.size() << std::endl;
+    // std::cout << std::boolalpha << "empty: " << q.empty() << std::endl;
+    // q2.print(std::cout);
 
 
 
