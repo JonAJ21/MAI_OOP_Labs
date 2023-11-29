@@ -41,13 +41,12 @@ int main() {
         // std::map<int, int> m;
         int64_t counter = 1;
         m.insert(std::pair<int, int>(0, 0));
-        for (int64_t i = 1; i < 1000; ++i) {
+        for (int64_t i = 1; i < 10000; ++i) {
             counter *= i;
             m.insert(std::pair<int, int>(i, counter));
         }
         auto end = std::chrono::high_resolution_clock::now();
         std::cout << "test1: " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << std::endl;
-        std::cout << "KDLS";
     }
     {
         auto begin = std::chrono::high_resolution_clock::now();
@@ -56,7 +55,7 @@ int main() {
         // std::map<int, int> m;
         int64_t counter = 1;
         m.insert(std::pair<int, int>(0, 0));
-        for (int64_t i = 1; i < 1000; ++i) {
+        for (int64_t i = 1; i < 10000; ++i) {
             counter *= i;
             m.insert(std::pair<int, int>(i, counter));
         }

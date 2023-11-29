@@ -18,11 +18,11 @@ namespace mai {
         using size_type = size_t;
 
         Allocator() = default;
-        // Allocator(Allocator const & other);
-        // Allocator(Allocator&& other);
-        // Allocator& operator=(Allocator<T> const & other);
-        // Allocator& operator=(Allocator<T>&& other);
-        ~Allocator();
+        Allocator(Allocator<T> const & other) = delete;
+        Allocator(Allocator<T>&& other);
+        Allocator& operator=(Allocator<T> const & other) = delete;
+        Allocator& operator=(Allocator<T>&& other);
+        virtual ~Allocator();
 
         template<typename U>
         struct rebind {using other = Allocator<U>;};
@@ -38,8 +38,19 @@ namespace mai {
     };
 
     template<typename T>
+    Allocator<T>::Allocator(Allocator<T>&& other) {
+        _used_blocks = std::move(other._used_blocks);
+        _free_blocks = std::move(other._free_blocks);
+    }
+
+    template<typename T>
+    Allocator<T>& Allocator<T>::operator=(Allocator<T>&& other) {
+        _used_blocks = std::move(other._used_blocks);
+        _free_blocks = std::move(other._free_blocks);
+    }
+
+    template<typename T>
     Allocator<T>::~Allocator() {
-        std::cout << -1 << std::endl;
         size_t free_blocks_size = _free_blocks.size();
         for (size_t i = 0; i < free_blocks_size; ++i) {
             T* ptr = _free_blocks[i].second;
@@ -75,6 +86,8 @@ namespace mai {
         }
         throw std::logic_error("Error: deallocate");
     }
+
+
 }
 
 #endif // ALLOCATOR_H
