@@ -184,14 +184,12 @@ namespace mai {
         }
         ~Queue() {
             this->clear();
-            std::cout << "destructor";
             _allocator.deallocate(_head, 1);
         }
 
         // void reserve(size_t capacity);
         //     //TODO
         void clear() {
-            std::cout << "Clear";
             while(!this->empty()) {
                 this->pop();
             }
