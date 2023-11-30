@@ -9,9 +9,6 @@ namespace mai {
     struct Item {
         T _data;
         Item<T>* _next;
-        // Item() = default;
-        // Item(T const & data) : _data(data), _next(nullptr) {}
-        // virtual ~Item() = default;
     };
 
     template<typename T, template <typename> typename Allocator = std::allocator>
@@ -164,7 +161,6 @@ namespace mai {
             other._size = 0;
         }
         Queue<T, Allocator>& operator=(Queue<T, Allocator> const & other) {
-            // TODO
             this->clear();
             _size = 0;
             QueueIterator it {other._head};
@@ -175,28 +171,30 @@ namespace mai {
             return *this;
         }
         Queue<T, Allocator>& operator=(Queue<T, Allocator>&& other) {
-            // TODO
-            // this->clear();
-            // _allocator.deallocate(_head, 1);
-            // _head = other._head;
-            // _tail = other._tail;
-            // _size = other._size;
-            // _allocator = std::move(other._allocator);
-            // other._head = nullptr;
-            // other._tail = nullptr;
-            // other._size = 0;
-            // return *this;
+            this->clear();
+            _allocator.deallocate(_head, 1);
+            _head = other._head;
+            _tail = other._tail;
+            _size = other._size;
+            _allocator = std::move(other._allocator);
+            other._head = nullptr;
+            other._tail = nullptr;
+            other._size = 0;
+            return *this;
         }
         ~Queue() {
-            // std::cout << "DESTRUCTOR";
-            clear();
+            this->clear();
+            std::cout << "destructor";
             _allocator.deallocate(_head, 1);
         }
 
-        void reserve(size_t capacity);
-            //TODO
+        // void reserve(size_t capacity);
+        //     //TODO
         void clear() {
-            //TODO
+            std::cout << "Clear";
+            while(!this->empty()) {
+                this->pop();
+            }
         }
 
         T& front() const {
@@ -231,7 +229,7 @@ namespace mai {
             return _size;
         }
 
-        void print(std::ostream& os) const noexcept;
+        // void print(std::ostream& os) const noexcept;
     };
 }
 

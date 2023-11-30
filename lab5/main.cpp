@@ -10,7 +10,7 @@ int main() {
 
     mai::Queue<int, mai::Allocator> q2 {1, 10, 3, 4, 5}; 
     
-    mai::Queue<int, mai::Allocator> q;
+    mai::Queue<int, mai::Allocator> q{1, 2, 3, 4, 2,2,3,3,1};
     q = std::move(q2);
     std::cout << "HERE" << std::endl;
     std::cout << q.front() << std::endl;

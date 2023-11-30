@@ -45,8 +45,18 @@ namespace mai {
 
     template<typename T>
     Allocator<T>& Allocator<T>::operator=(Allocator<T>&& other) {
+        while (!_used_blocks.empty()) {
+            delete _used_blocks.back().second;
+            _used_blocks.pop_back();
+        }
+        while (!_free_blocks.empty()) {
+            delete _free_blocks.back().second;
+            _free_blocks.pop_back();
+        }
+
         _used_blocks = std::move(other._used_blocks);
         _free_blocks = std::move(other._free_blocks);
+        
         return *this;
     }
 

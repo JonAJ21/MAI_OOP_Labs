@@ -14,47 +14,7 @@ namespace mai {
         T* _data;
         size_t _head_idx;
     public:
-        class QueueIterator final {
-        private:
-            T* _item;
-        public:
-            friend class Queue;
-
-            using iterator_category = std::forward_iterator_tag;
-            using difference_type = std::ptrdiff_t;
-            using value_type = T;
-            using pointer = T*;
-            using reference = T&;
-
-            QueueIterator() = default;
-            QueueIterator(T const & ptr) : _item(ptr) {};
-
-            T& operator*() {
-                return *_item;
-            }
-            
-            QueueIterator& operator++() {
-                
-            }
-
-            QueueIterator& operator++(int) {
-                auto copy = *this;
-                ++(*this);
-                return copy;
-            }
-
-            QueueIterator& operator+=(size_t n) {
-                for (size_t i = 0; i < n; ++i) {
-
-                }
-            }
-
-
-        };
-
-
-
-
+        
         Queue() noexcept;
         Queue(size_t size);
         Queue(std::initializer_list<T> const & init_list);
