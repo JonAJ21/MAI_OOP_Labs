@@ -2,51 +2,52 @@
 
 #include "npc.h"
 
-int main() {
 
-   std::cout << "Hello lab6.1" << std::endl;
-//    foo();
-    // Разбойник, Орк, Оборотень
-    // Разбойник убивает оборотней
-    // Оборотень убивает разбойника
-    // Орк убивает разбойника
-    auto fight_visitor = std::make_shared<FightVisitor>();
-    // // auto orc2 = new Orc;
-    std::shared_ptr<NPC> orc1 = std::make_shared<Orc>(2, 5);
-    auto robber1 = std::make_shared<Robber>(7, 8);
-    // auto robber2 = std::make_shared<Robber>(7, 8);
-    auto orc2 = std::make_shared<Orc>(10, 6);
-    auto werewolf1 = std::make_shared<Werewolf>(1, 0);
+set_t fight(const set_t &array, size_t distance) {
+    set_t dead_list;
 
-    // // std::vector<std::shared_ptr<NPC>> s {orc1, orc2};
-    set_t array {orc1, orc2, robber1, werewolf1};
-    // set_t array {robber1, robber2};
-
-    // // orc1->accept(orc2, fight_visitor);
-    // // orc1->accept(robber1, fight_visitor);
-    // // orc1->accept(werewolf1, fight_visitor);
-
-    // // orc2->accept(orc1, fight_visitor);
-    // // orc2->accept(robber1, fight_visitor);
-    // // orc2->accept(werewolf1, fight_visitor);
-
-    // // robber1->accept(orc1, fight_visitor);
-    // // robber1->accept(orc2, fight_visitor);
-    // // robber1->accept(werewolf1, fight_visitor);
-    // // std::cout << s[0]->x << ' ' << s[0]->y << std::endl;
-    // // std::cout << s[1]->x << ' ' << s[1]->y << std::endl;
-    // // orc1->accept(robber1, fight_visitor);
-    // // s[1]->accept(s[0], fight_visitor);
-    // // std::cout << orc1->type << std::endl;
     for (const auto &attacker : array)
         for (const auto &defender : array)
-            if (attacker != defender)
-            {
-                defender->accept(attacker);
+            if ((attacker != defender) && (attacker->is_close(defender, distance)))
+            {   
+                if (defender->accept(attacker)) dead_list.insert(defender);
             }
 
-    // std::vector<std::shared_ptr<NPC>> v {orc1, orc2};
-    // set_t s {orc1, orc2};
-    
+    return dead_list;
+}
+
+
+int main() {
+
+    std::vector<std::shared_ptr<IFactory>> factories {std::make_shared<RobberFactory>(),
+                                                      std::make_shared<OrcFactory>(),
+                                                      std::make_shared<WerewolfFactory>()};
+
+    set_t array;
+
+    for (size_t i = 0; i < 50; ++i) {
+        array.insert(factories[std::rand() % 3]->createNPC(std::rand() % 100, std::rand() % 100));
+    }
+    for (auto el : array) {
+        el->print();
+    }
+
+    std::cout << "Fighting ..." << std::endl;
+
+    for (size_t distance = 20; (distance <= 100) && !array.empty(); distance += 10)
+    {
+        auto dead_list = fight(array, distance);
+        for (auto &d : dead_list)
+            array.erase(d);
+        std::cout << "Fight stats ----------" << std::endl
+                  << "distance: " << distance << std::endl
+                  << "killed: " << dead_list.size() << std::endl
+                  << std::endl << std::endl;
+    }
+
+    for (auto el : array) {
+        el->print();
+    }
+
     return 0;
 }  

@@ -1,35 +1,47 @@
 #include "npc.h"
 
+// =======================================
 // Robber
 
 Robber::Robber(int x, int y) : NPC(RobberType, x, y) {}
 
 void Robber::print() {
-
+    std::cout << *this;
 }
-void Robber::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) {
+bool Robber::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) {
     if (npc->type == RobberType) {
-            // std::cout << "npc robber";
-            visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Robber>(npc));
-            return;
+        // std::cout << "npc robber";
+        visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Robber>(npc));
+        return false;
     }
     if (npc->type == OrcType) {
         visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Orc>(npc));
-        return;
+        return true;
     } 
     if (npc->type == WerewolfType) {
         visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Werewolf>(npc));
-        return;
+        return true;
     }
     throw std::logic_error("Incorrect Type");
 }
 void Robber::fight(std::shared_ptr<Robber> robber) {
-    std::cout << "Robber vs Robber" << std::endl;
+    fight_notify(robber, false);
+    // std::cout << "Robber vs Robber" << std::endl;
 }
 void Robber::fight(std::shared_ptr<Orc> orc) {
-    std::cout << "Robber vs Orc" << std::endl;
+    fight_notify(orc, false);
+    // std::cout << "Robber vs Orc" << std::endl;
 }
 void Robber::fight(std::shared_ptr<Werewolf> werewolf) {
-    std::cout << "Robber vs Werewolf" << std::endl;
+    fight_notify(werewolf, true);
+    // std::cout << "Robber vs Werewolf" << std::endl;
+}
+
+// =======================================
+// std::ostream
+
+std::ostream &operator<<(std::ostream &os, Robber &robber) {
+    os << "Robber: " << *static_cast<NPC *>(&robber) << std::endl;
+    return os;
 }
 
