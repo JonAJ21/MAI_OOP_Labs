@@ -7,10 +7,18 @@
 #include <vector>
 #include <set>
 
+// #include "robber.h"
+// #include "orc.h"
+// #include "werewolf.h"
+
 class NPC;
 class Robber;
 class Orc;
 class Werewolf;
+
+// class IVisitor {};
+// class FightVisitor : public IVisitor {};
+
 
 using set_t = std::set<std::shared_ptr<NPC>>;
 
@@ -41,7 +49,19 @@ public:
     virtual void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Werewolf> other) = 0;   
 };
 
-// class FightVisitor;
+class FightVisitor : public IVisitor {
+    void visit(std::shared_ptr<Robber> robber, std::shared_ptr<Robber> other) override;
+    void visit(std::shared_ptr<Robber> robber, std::shared_ptr<Orc> other) override;
+    void visit(std::shared_ptr<Robber> robber, std::shared_ptr<Werewolf> other) override;
+
+    void visit(std::shared_ptr<Orc> orc, std::shared_ptr<Robber> other) override;
+    void visit(std::shared_ptr<Orc> orc, std::shared_ptr<Orc> other) override;
+    void visit(std::shared_ptr<Orc> orc, std::shared_ptr<Werewolf> other) override;
+
+    void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Robber> other) override;
+    void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Orc> other) override;
+    void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Werewolf> other) override;
+};
 
 
 class NPC : public std::enable_shared_from_this<NPC> {
@@ -59,10 +79,7 @@ public:
     // void subscribe(std::shared_ptr<IFightObserver> observer);
     // void fight_notify(const std::shared_ptr<NPC> defender, bool win);
     // virtual bool is_close(const std::shared_ptr<NPC> &other, size_t distance) const;
-    virtual void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) = 0;
-    // virtual void accept(std::shared_ptr<Robber> robber, std::shared_ptr<IVisitor> visitor) = 0;
-    // virtual void accept(std::shared_ptr<Orc> orc, std::shared_ptr<IVisitor> visitor) = 0;
-    // virtual void accept(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<IVisitor> visitor) = 0;
+    virtual void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) = 0;
 
     virtual void fight(std::shared_ptr<Robber> robber) = 0;
     virtual void fight(std::shared_ptr<Orc> orc) = 0;
@@ -72,6 +89,37 @@ public:
     virtual void print() = 0;
     friend std::ostream &operator<<(std::ostream &os, NPC &npc);
 };
+
+class Robber : public NPC {
+public:
+    Robber(int x, int y);
+    void print() override;
+    void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) override;
+    void fight(std::shared_ptr<Robber> robber);
+    void fight(std::shared_ptr<Orc> orc);
+    void fight(std::shared_ptr<Werewolf> werewolf);
+};
+
+class Orc : public NPC {
+public:
+    Orc(int x, int y);
+    void print() override;
+    void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) override;
+    void fight(std::shared_ptr<Robber> robber);
+    void fight(std::shared_ptr<Orc> orc);
+    void fight(std::shared_ptr<Werewolf> werewolf);
+};
+
+class Werewolf : public NPC {
+public:
+    Werewolf(int x, int y);
+    void print() override;
+    void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) override;
+    void fight(std::shared_ptr<Robber> robber);
+    void fight(std::shared_ptr<Orc> orc);
+    void fight(std::shared_ptr<Werewolf> werewolf);
+};
+
 
 
 
@@ -109,166 +157,17 @@ public:
 //         }
 //     }
 // };
-class Robber : public NPC {
-public:
-    
-    Robber(int x, int y) : NPC(RobberType, x, y){
-    }
-    // ~Robber() = default;
-
-    void print() override {
-
-    }
-
-    void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) override {
-        if (npc->type == RobberType) {
-            // std::cout << "npc robber";
-            visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Robber>(npc));
-            return;
-        }
-        if (npc->type == OrcType) {
-            visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Orc>(npc));
-            return;
-        } 
-        if (npc->type == WerewolfType) {
-            visitor->visit(std::dynamic_pointer_cast<Robber>(shared_from_this()), std::dynamic_pointer_cast<Werewolf>(npc));
-            return;
-        }
-        throw std::logic_error("Incorrect Type");
-    }
-
-    void fight(std::shared_ptr<Robber> robber) {
-        std::cout << "Robber vs Robber" << std::endl;
-    }
-    void fight(std::shared_ptr<Orc> orc) {
-        std::cout << "Robber vs Orc" << std::endl;
-    }
-    void fight(std::shared_ptr<Werewolf> werewolf) {
-        std::cout << "Robber vs Werewolf" << std::endl;
-    }
-
-    // friend std::ostream &operator<<(std::ostream &os, Orc &orc) {
-    //     return os;
-    // }
-};
 
 
-class Orc : public NPC {
-public:
-    
-    Orc(int x, int y) : NPC(OrcType, x, y){
-    }
-    // ~Orc() = default;
 
-    void print() override {
 
-    }
 
-    void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) override {
-        if (npc->type == RobberType) {
-            visitor->visit(std::dynamic_pointer_cast<Orc>(shared_from_this()), std::dynamic_pointer_cast<Robber>(npc));
-            return;
-        }
-        if (npc->type == OrcType) {
-            visitor->visit(std::dynamic_pointer_cast<Orc>(shared_from_this()), std::dynamic_pointer_cast<Orc>(npc));
-            return;
-        } 
-        if (npc->type == WerewolfType) {
-            visitor->visit(std::dynamic_pointer_cast<Orc>(shared_from_this()), std::dynamic_pointer_cast<Werewolf>(npc));
-            return;
-        }
-        throw std::logic_error("Incorrect Type");
-    }
 
-    void fight(std::shared_ptr<Robber> robber) {
-        std::cout << "Orc vs Robber" << std::endl;
-    }
-    void fight(std::shared_ptr<Orc> orc) {
-        std::cout << "Orc vs Orc" << std::endl;
-    }
-    void fight(std::shared_ptr<Werewolf> werewolf) {
-        std::cout << "Orc vs Werewolf" << std::endl;
-    }
 
-    // friend std::ostream &operator<<(std::ostream &os, Orc &orc) {
-    //     return os;
-    // }
-};
 
-class Werewolf : public NPC {
-public:
-    
-    Werewolf(int x, int y) : NPC(WerewolfType, x, y){
-    }
-    // ~Werewolf() = default;
 
-    void print() override {
 
-    }
 
-    void accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) override {
-        if (npc->type == RobberType) {
-            visitor->visit(std::dynamic_pointer_cast<Werewolf>(shared_from_this()), std::dynamic_pointer_cast<Robber>(npc));
-            return;
-        }
-        if (npc->type == OrcType) {
-            visitor->visit(std::dynamic_pointer_cast<Werewolf>(shared_from_this()), std::dynamic_pointer_cast<Orc>(npc));
-            return;
-        } 
-        if (npc->type == WerewolfType) {
-            visitor->visit(std::dynamic_pointer_cast<Werewolf>(shared_from_this()), std::dynamic_pointer_cast<Werewolf>(npc));
-            return;
-        }
-        throw std::logic_error("Incorrect Type");
-    }
-
-    void fight(std::shared_ptr<Robber> robber) {
-        std::cout << "Werewolf vs Robber" << std::endl;
-    }
-    void fight(std::shared_ptr<Orc> orc) {
-        std::cout << "Werewolf vs Orc" << std::endl;
-    }
-    void fight(std::shared_ptr<Werewolf> werewolf) {
-        std::cout << "Werewolf vs Werewolf" << std::endl;
-    }
-
-    // friend std::ostream &operator<<(std::ostream &os, Orc &orc) {
-    //     return os;
-    // }
-};
-
-class FightVisitor : public IVisitor {
-public:
-    void visit(std::shared_ptr<Robber> robber, std::shared_ptr<Robber> other) {
-        robber->fight(other);
-    }
-    void visit(std::shared_ptr<Robber> robber, std::shared_ptr<Orc> other) {
-        robber->fight(other);
-    }
-    void visit(std::shared_ptr<Robber> robber, std::shared_ptr<Werewolf> other) {
-        robber->fight(other);
-    }
-
-    void visit(std::shared_ptr<Orc> orc, std::shared_ptr<Robber> other) {
-        orc->fight(other);
-    }
-    void visit(std::shared_ptr<Orc> orc, std::shared_ptr<Orc> other) {
-        orc->fight(other);
-    }
-    void visit(std::shared_ptr<Orc> orc, std::shared_ptr<Werewolf> other) {
-        orc->fight(other);
-    }
-
-    void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Robber> other) {
-        werewolf->fight(other);
-    }
-    void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Orc> other) {
-        werewolf->fight(other);
-    }
-    void visit(std::shared_ptr<Werewolf> werewolf, std::shared_ptr<Werewolf> other) {
-        werewolf->fight(other);
-    }
-};
 
 // class OrcFactory : public IFactory {
 // public:
