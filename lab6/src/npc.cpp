@@ -1,5 +1,19 @@
 #include "npc.h"
 
+// =======================================
+// NPC
+
+NPC::NPC(NpcType t, int _x, int _y) : type(t), x(_x), y(_y) {
+}
+
+NPC::NPC(NpcType t, std::istream & is) : type(t) {
+    is >> x;
+    is >> y;
+}
+
+// void NPC::save(std::ostream &os) {
+//     os << x << ' ' << y << std::endl;
+// }
 
 // =======================================
 // RobberFactory
@@ -7,12 +21,16 @@
 std::shared_ptr<NPC> RobberFactory::createNPC(int x, int y) {
     auto res = std::make_shared<Robber>(x, y);
     res->subscribe(PrintFightObserver::get());
+    res->subscribe(LogFightObserver::get());
     return res;
 }
 
-// std::shared_ptr<NPC> RobberFactory::createNPC(std::istream & is) {
-//     return std::make_shared<Robber>(is);
-// }
+std::shared_ptr<NPC> RobberFactory::createNPC(std::istream & is) {
+    auto res = std::make_shared<Robber>(is);
+    res->subscribe(PrintFightObserver::get());
+    res->subscribe(LogFightObserver::get());
+    return res;
+}
 
 // =======================================
 // OrcFactory
@@ -20,12 +38,16 @@ std::shared_ptr<NPC> RobberFactory::createNPC(int x, int y) {
 std::shared_ptr<NPC> OrcFactory::createNPC(int x, int y) {
     auto res = std::make_shared<Orc>(x, y);
     res->subscribe(PrintFightObserver::get());
+    res->subscribe(LogFightObserver::get());
     return res;
 }
 
-// std::shared_ptr<NPC> OrcFactory::createNPC(std::istream & is) {
-//     return std::make_shared<Orc>(is);
-// }
+std::shared_ptr<NPC> OrcFactory::createNPC(std::istream & is) {
+    auto res = std::make_shared<Orc>(is);
+    res->subscribe(PrintFightObserver::get());
+    res->subscribe(LogFightObserver::get());
+    return res;
+}
 
 // =======================================
 // WerewolfFactory
@@ -33,12 +55,16 @@ std::shared_ptr<NPC> OrcFactory::createNPC(int x, int y) {
 std::shared_ptr<NPC> WerewolfFactory::createNPC(int x, int y) {
     auto res = std::make_shared<Werewolf>(x, y);
     res->subscribe(PrintFightObserver::get());
+    res->subscribe(LogFightObserver::get());
     return res;
 }
 
-// std::shared_ptr<NPC> WerewolfFactory::createNPC(std::istream & is) {
-//     return std::make_shared<Werewolf>(is);
-// }
+std::shared_ptr<NPC> WerewolfFactory::createNPC(std::istream & is) {
+    auto res = std::make_shared<Werewolf>(is);
+    res->subscribe(PrintFightObserver::get());
+    res->subscribe(LogFightObserver::get());
+    return res;
+}
 
 
 // =======================================
@@ -46,15 +72,15 @@ std::shared_ptr<NPC> WerewolfFactory::createNPC(int x, int y) {
 
 void LogFightObserver::on_fight(const std::shared_ptr<NPC> attacker,const std::shared_ptr<NPC> defender, bool win) {
     if (win) {
-        // Скорее всего лучше подавать имя файла в качестве параметра
         std::ofstream out;
-        out.open("log.txt");
+        out.open("log.txt", std::ios::app);
         if (out.is_open()) {
             out << std::endl
                 << "Murder --------" << std::endl;
-            attacker->print();
-            defender->print();
+            attacker->print(out);
+            defender->print(out);
         }
+        out.close();
     }
 }
 
@@ -74,11 +100,11 @@ void PrintFightObserver::on_fight(const std::shared_ptr<NPC> attacker,const std:
 // FightVisitor
 
 void FightVisitor::visit(std::shared_ptr<Robber> robber, std::shared_ptr<Robber> other) {
-        robber->fight(other);
+    robber->fight(other);
 }
 
 void FightVisitor::visit(std::shared_ptr<Robber> robber, std::shared_ptr<Orc> other) {
-        robber->fight(other);
+    robber->fight(other);
 }
 void FightVisitor::visit(std::shared_ptr<Robber> robber, std::shared_ptr<Werewolf> other) {
     robber->fight(other);

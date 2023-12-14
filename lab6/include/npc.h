@@ -26,25 +26,25 @@ enum NpcType {
 class IFactory {
 public:
     virtual std::shared_ptr<NPC> createNPC(int x, int y) = 0;
-    // virtual std::shared_ptr<NPC> createNPC(std::istream & is) = 0;
+    virtual std::shared_ptr<NPC> createNPC(std::istream & is) = 0;
 };
 
 class RobberFactory : public IFactory {
 public:
     std::shared_ptr<NPC> createNPC(int x, int y) override;
-    // std::shared_ptr<NPC> createNPC(std::istream & is) override;
+    std::shared_ptr<NPC> createNPC(std::istream & is) override;
 };
 
 class OrcFactory : public IFactory {
 public:
     std::shared_ptr<NPC> createNPC(int x, int y) override;
-    // std::shared_ptr<NPC> createNPC(std::istream & is) override;
+    std::shared_ptr<NPC> createNPC(std::istream & is) override;
 };
 
 class WerewolfFactory : public IFactory {
 public:
     std::shared_ptr<NPC> createNPC(int x, int y) override;
-    // std::shared_ptr<NPC> createNPC(std::istream & is) override;
+    std::shared_ptr<NPC> createNPC(std::istream & is) override;
 };
 
 class IFightObserver {
@@ -53,7 +53,13 @@ public:
 };
 
 class LogFightObserver : public IFightObserver {
+private:
+    LogFightObserver(){};
 public:
+    static std::shared_ptr<IFightObserver> get() {
+        static LogFightObserver instance;
+        return std::shared_ptr<IFightObserver>(&instance, [](IFightObserver *) {});
+    }
     void on_fight(const std::shared_ptr<NPC> attacker,const std::shared_ptr<NPC> defender, bool win) override;
 };
 
@@ -61,8 +67,7 @@ class PrintFightObserver : public IFightObserver {
 private: 
     PrintFightObserver(){};
 public:
-    static std::shared_ptr<IFightObserver> get()
-    {
+    static std::shared_ptr<IFightObserver> get() {
         static PrintFightObserver instance;
         return std::shared_ptr<IFightObserver>(&instance, [](IFightObserver *) {});
     }
@@ -108,9 +113,8 @@ public:
     NpcType type;
     int x = 0;
     int y = 0;
-    NPC(NpcType t, int _x, int _y) : type(t), x(_x), y(_y) {
-    }
-    // NPC(NpcType t, std::istream &is);
+    NPC(NpcType t, int _x, int _y);
+    NPC(NpcType t, std::istream &is);
 
     std::vector<std::shared_ptr<IFightObserver>> observers;
     void subscribe(std::shared_ptr<IFightObserver> observer);
@@ -122,42 +126,52 @@ public:
     virtual void fight(std::shared_ptr<Robber> robber) = 0;
     virtual void fight(std::shared_ptr<Orc> orc) = 0;
     virtual void fight(std::shared_ptr<Werewolf> werewolf) = 0;
-
-
+    
+    virtual void save(std::ostream &os) = 0;
     virtual void print() = 0;
+    virtual void print(std::ofstream& of) = 0;
     friend std::ostream &operator<<(std::ostream &os, NPC &npc);
 };
 
 class Robber : public NPC {
 public:
     Robber(int x, int y);
+    Robber(std::istream &is);
     void print() override;
+    void print(std::ofstream& of) override;
     bool accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) override;
     void fight(std::shared_ptr<Robber> robber);
     void fight(std::shared_ptr<Orc> orc);
     void fight(std::shared_ptr<Werewolf> werewolf);
+    void save(std::ostream &os) override;
     friend std::ostream &operator<<(std::ostream &os, Robber &robber);
 };
 
 class Orc : public NPC {
 public:
     Orc(int x, int y);
+    Orc(std::istream &is);
     void print() override;
+    void print(std::ofstream& of) override;
     bool accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) override;
     void fight(std::shared_ptr<Robber> robber);
     void fight(std::shared_ptr<Orc> orc);
     void fight(std::shared_ptr<Werewolf> werewolf);
+    void save(std::ostream &os) override;
     friend std::ostream &operator<<(std::ostream &os, Orc &orc);
 };
 
 class Werewolf : public NPC {
 public:
     Werewolf(int x, int y);
+    Werewolf(std::istream &is);
     void print() override;
+    void print(std::ofstream& of) override;
     bool accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor = std::make_shared<FightVisitor>()) override;
     void fight(std::shared_ptr<Robber> robber);
     void fight(std::shared_ptr<Orc> orc);
     void fight(std::shared_ptr<Werewolf> werewolf);
+    void save(std::ostream &os) override;
     friend std::ostream &operator<<(std::ostream &os, Werewolf &werewolf);
 };
 

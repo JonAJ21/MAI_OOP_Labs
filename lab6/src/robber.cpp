@@ -5,9 +5,16 @@
 
 Robber::Robber(int x, int y) : NPC(RobberType, x, y) {}
 
+Robber::Robber(std::istream & is) : NPC(RobberType, is) {}
+
 void Robber::print() {
     std::cout << *this;
 }
+
+void Robber::print(std::ofstream& of) {
+    of << *this;
+} 
+
 bool Robber::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) {
     if (npc->type == RobberType) {
         // std::cout << "npc robber";
@@ -38,7 +45,10 @@ void Robber::fight(std::shared_ptr<Werewolf> werewolf) {
 }
 
 // =======================================
-// std::ostream
+// in and out
+void Robber::save(std::ostream &os) {
+    os << RobberType << ' ' << x << ' ' << y << std::endl;
+}
 
 std::ostream &operator<<(std::ostream &os, Robber &robber) {
     os << "Robber: " << *static_cast<NPC *>(&robber) << std::endl;

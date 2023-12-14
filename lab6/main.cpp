@@ -2,7 +2,6 @@
 
 #include "npc.h"
 
-
 set_t fight(const set_t &array, size_t distance) {
     set_t dead_list;
 
@@ -17,20 +16,59 @@ set_t fight(const set_t &array, size_t distance) {
 }
 
 
-int main() {
+void save(const set_t &array, const std::string &filename)
+{
+    std::ofstream fs(filename);
+    fs << array.size() << std::endl;
+    for (auto &n : array)
+        n->save(fs);
+    fs.flush();
+    fs.close();
+}
 
+set_t load(const std::string &filename)
+{   
     std::vector<std::shared_ptr<IFactory>> factories {std::make_shared<RobberFactory>(),
                                                       std::make_shared<OrcFactory>(),
                                                       std::make_shared<WerewolfFactory>()};
-
-    set_t array;
-
-    for (size_t i = 0; i < 50; ++i) {
-        array.insert(factories[std::rand() % 3]->createNPC(std::rand() % 100, std::rand() % 100));
+    set_t result;
+    std::ifstream is(filename);
+    if (is.good() && is.is_open())
+    {
+        int count;
+        is >> count;
+        for (int i = 0; i < count; ++i) {
+            int type;
+            is >> type;
+            std::cout << type << std::endl;
+            int x, y;
+            is >> x >> y;
+            result.insert(factories[type - 1]->createNPC(x, y));
+        }  
+        is.close();
+    } else {
+        throw std::logic_error("Error: ifstream");
+        // std::cerr << "Error: " << std::perror(errno) << std::endl;
     }
-    for (auto el : array) {
-        el->print();
-    }
+    return result;
+}
+
+
+int main() {
+
+    // std::vector<std::shared_ptr<IFactory>> factories {std::make_shared<RobberFactory>(),
+    //                                                   std::make_shared<OrcFactory>(),
+    //                                                   std::make_shared<WerewolfFactory>()};
+    
+    // set_t array;
+
+    // for (size_t i = 0; i < 50; ++i) {
+    //     array.insert(factories[std::rand() % 3]->createNPC(std::rand() % 100, std::rand() % 100));
+    // }
+    // for (auto el : array) {
+    //     el->print();
+    // }
+    set_t array = load("npcs.txt");
 
     std::cout << "Fighting ..." << std::endl;
 
@@ -48,6 +86,8 @@ int main() {
     for (auto el : array) {
         el->print();
     }
+
+    save(array, "npcsout.txt");
 
     return 0;
 }  

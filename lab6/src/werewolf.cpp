@@ -3,12 +3,17 @@
 // =======================================
 // Werewolf
 
-Werewolf::Werewolf(int x, int y) : NPC(WerewolfType, x, y){
-}
+Werewolf::Werewolf(int x, int y) : NPC(WerewolfType, x, y) {}
+
+Werewolf::Werewolf(std::istream & is) : NPC(WerewolfType, is) {}
 
 void Werewolf::print() {
     std::cout << *this;
 }
+
+void Werewolf::print(std::ofstream& of) {
+    of << *this;
+} 
 
 bool Werewolf::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor)  {
     if (npc->type == RobberType) {
@@ -40,7 +45,11 @@ void Werewolf::fight(std::shared_ptr<Werewolf> werewolf) {
 }
 
 // =======================================
-// std::ostream
+// in and out
+
+void Werewolf::save(std::ostream &os) {
+    os << WerewolfType << ' ' << x << ' ' << y << std::endl;
+}
 
 std::ostream &operator<<(std::ostream &os, Werewolf &werewolf) {
     os << "Werewolf: " << *static_cast<NPC *>(&werewolf) << std::endl;

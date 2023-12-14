@@ -5,9 +5,15 @@
 
 Orc::Orc(int x, int y) : NPC(OrcType, x, y) {}
 
+Orc::Orc(std::istream & is) : NPC(OrcType, is) {}
+
 void Orc::print() {
     std::cout << *this;
 }
+
+void Orc::print(std::ofstream& of) {
+    of << *this;
+} 
 
 bool Orc::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor) {
     if (npc->type == RobberType) {
@@ -39,7 +45,10 @@ void Orc::fight(std::shared_ptr<Werewolf> werewolf) {
 }
 
 // =======================================
-// std::ostream
+// in and out
+void Orc::save(std::ostream &os) {
+    os << OrcType << ' ' << x << ' ' << y << std::endl;
+}
 
 std::ostream &operator<<(std::ostream &os, Orc &orc) {
     os << "Orc: " << *static_cast<NPC *>(&orc) << std::endl;
