@@ -15,7 +15,10 @@ void Werewolf::print(std::ofstream& of) {
     of << *this;
 } 
 
-bool Werewolf::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor)  {
+bool Werewolf::accept(std::shared_ptr<NPC> npc, std::shared_ptr<IVisitor> visitor){
+    if (npc == shared_from_this()) {
+        throw std::logic_error("Decided to kill himself");
+    }
     if (npc->type == RobberType) {
         visitor->visit(std::dynamic_pointer_cast<Werewolf>(shared_from_this()), std::dynamic_pointer_cast<Robber>(npc));
         return true;
