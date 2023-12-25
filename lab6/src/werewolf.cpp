@@ -54,7 +54,7 @@ void Werewolf::save(std::ostream &os) {
     os << WerewolfType << ' ' << x << ' ' << y << std::endl;
 }
 
-std::ostream &operator<<(std::ostream &os, Werewolf &werewolf) {
+std::ostream &operator<<(std::ostream &os, Werewolf const &werewolf) {
     os << "Werewolf: " << *static_cast<NPC *>(&werewolf) << std::endl;
     return os;
 }

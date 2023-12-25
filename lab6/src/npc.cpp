@@ -160,7 +160,7 @@ bool NPC::is_close(const std::shared_ptr<NPC> &other, size_t distance) const {
 // =======================================
 // std::ostream
 
-std::ostream &operator<<(std::ostream &os, NPC &npc) {
+std::ostream &operator<<(std::ostream &os, NPC const &npc) {
     os << "{ x:" << npc.x << ", y:" << npc.y << "} ";
     return os;
 }

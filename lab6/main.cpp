@@ -68,6 +68,7 @@ int main() {
     // for (auto el : array) {
     //     el->print();
     // }
+    // save(array, "npcs.txt");
     set_t array = load("npcs.txt");
 
     std::cout << "Fighting ..." << std::endl;

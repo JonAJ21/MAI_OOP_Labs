@@ -53,7 +53,7 @@ void Robber::save(std::ostream &os) {
     os << RobberType << ' ' << x << ' ' << y << std::endl;
 }
 
-std::ostream &operator<<(std::ostream &os, Robber &robber) {
+std::ostream &operator<<(std::ostream &os, Robber const &robber) {
     os << "Robber: " << *static_cast<NPC *>(&robber) << std::endl;
     return os;
 }

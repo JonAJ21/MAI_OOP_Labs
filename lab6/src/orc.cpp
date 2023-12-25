@@ -53,7 +53,7 @@ void Orc::save(std::ostream &os) {
     os << OrcType << ' ' << x << ' ' << y << std::endl;
 }
 
-std::ostream &operator<<(std::ostream &os, Orc &orc) {
+std::ostream &operator<<(std::ostream &os, Orc const &orc) {
     os << "Orc: " << *static_cast<NPC *>(&orc) << std::endl;
     return os;
 }
