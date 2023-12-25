@@ -1,12 +1,12 @@
 #include "orc.h"
 
 Orc::Orc(int x, int y) : NPC(OrcType, x, y) {
-    move_distance = 10;
+    move_distance = 20;
     kill_distance = 10;
 }
 
 Orc::Orc(std::istream& is) : NPC(OrcType, is) {
-    move_distance = 10;
+    move_distance = 20;
     kill_distance = 10;
 }
 

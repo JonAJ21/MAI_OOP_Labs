@@ -14,7 +14,7 @@ std::shared_ptr<Visitor> robber_visitor = std::make_shared<RobberVisitor>();
 
 TEST(VisitorTest, Orc) {
     ASSERT_FALSE(orc_visitor->visit(std::static_pointer_cast<Orc>(orc)));
-    ASSERT_TRUE(orc_visitor->visit(std::static_pointer_cast<Werewolf>(werewolf)));
+    ASSERT_FALSE(orc_visitor->visit(std::static_pointer_cast<Werewolf>(werewolf)));
     ASSERT_TRUE(orc_visitor->visit(std::static_pointer_cast<Robber>(robber)));
 }
 
@@ -26,13 +26,13 @@ TEST(VisitorTest, Werewolf) {
 
 TEST(VisitorTest, Robber) {
     ASSERT_FALSE(robber_visitor->visit(std::static_pointer_cast<Orc>(orc)));
-    ASSERT_FALSE(robber_visitor->visit(std::static_pointer_cast<Werewolf>(werewolf)));
+    ASSERT_TRUE(robber_visitor->visit(std::static_pointer_cast<Werewolf>(werewolf)));
     ASSERT_FALSE(robber_visitor->visit(std::static_pointer_cast<Robber>(robber)));
 }
 
 TEST(AcceptTest, Orc) {
     ASSERT_FALSE(orc->accept(orc));
-    ASSERT_TRUE(werewolf->accept(orc));
+    ASSERT_FALSE(werewolf->accept(orc));
     ASSERT_TRUE(robber->accept(orc));    
 }
 
@@ -44,7 +44,7 @@ TEST(AcceptTest, Werewolf) {
 
 TEST(AcceptTest, Robber) {
     ASSERT_FALSE(orc->accept(robber));
-    ASSERT_FALSE(werewolf->accept(robber));
+    ASSERT_TRUE(werewolf->accept(robber));
     ASSERT_FALSE(robber->accept(robber));
 }
 

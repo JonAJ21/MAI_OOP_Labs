@@ -165,7 +165,7 @@ int main() {
             if (npc->is_alive()) {
                 switch (npc->get_type()) {
                     case OrcType:
-                        fields[i][j] = 'S';
+                        fields[i][j] = 'O';
                         break;
                     
                     case WerewolfType:
@@ -173,7 +173,7 @@ int main() {
                         break;
                     
                     case RobberType:
-                        fields[i][j] = 'D';
+                        fields[i][j] = 'R';
                         break;
 
                     default:
@@ -196,6 +196,7 @@ int main() {
             std::cout << std::endl;
         }
         std::this_thread::sleep_for(1s);
+
         auto end = std::chrono::steady_clock::now();
         if (std::chrono::duration_cast<std::chrono::seconds>(end - start) >= time) {
             break;
@@ -204,6 +205,14 @@ int main() {
 
     move_thread.join();
     fight_thread.join();
+
+    for (auto it = array.begin(); it != array.end();) {
+        if (!(*it)->is_alive()) {
+            it = array.erase(it);
+        } else {
+            ++it;
+        }
+    }
 
     std::cout << "Survivors: " << std::endl << array;
 

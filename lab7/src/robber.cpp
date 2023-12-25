@@ -1,13 +1,13 @@
 #include "robber.h"
 
 Robber::Robber(int x, int y) : NPC(RobberType, x, y) {
-    move_distance = 5;
-    kill_distance = 5;
+    move_distance = 10;
+    kill_distance = 10;
 }
 
 Robber::Robber(std::istream& is) : NPC(RobberType, is) {
-    move_distance = 5;
-    kill_distance = 5;
+    move_distance = 10;
+    kill_distance = 10;
 }
 
 bool Robber::accept(const std::shared_ptr<NPC>& attacker) const {

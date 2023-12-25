@@ -24,7 +24,7 @@ class RobberVisitor final : public Visitor {
                 break;
             
             case NpcType::OrcType:
-                result = true;
+                result = false;
                 break;
         }
         return result;
@@ -36,7 +36,7 @@ class WerewolfVisitor final : public Visitor {
         bool result{};
         switch (npc->get_type()) {
             case NpcType::RobberType:
-                result = false;
+                result = true;
                 break;
 
             case NpcType::WerewolfType:
@@ -44,7 +44,7 @@ class WerewolfVisitor final : public Visitor {
                 break;
             
             case NpcType::OrcType:
-                result = true;
+                result = false;
                 break;
         }
         return result;
@@ -57,7 +57,7 @@ public:
         bool result{};
         switch (npc->get_type()) {
             case NpcType::RobberType:
-                result = false;
+                result = true;
                 break;
 
             case NpcType::WerewolfType:
